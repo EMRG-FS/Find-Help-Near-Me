@@ -84,32 +84,23 @@ footer p{margin:0 0 .5rem}
  <div class="wrap">
   <p class="kicker">Student tool</p>
   <h1>Find Help Near Me</h1>
-  <p>Choose your county and the kinds of help you want. You will get links to your college, your county, and California.</p>
+  <p>Choose your college and the kinds of help you want. You will get links to your college, your county, and California.</p>
  </div>
 </header>
 <noscript><div class="warn" style="max-width:52rem;margin:1rem auto;padding:1rem"><p>This tool needs JavaScript. Please turn it on, or ask your college for a printed list of help.</p></div></noscript>
 <main id="main">
  <div id="formArea" class="noprint">
   <div class="note"><p><strong>Before you start:</strong> This tool does not apply for anything, does not save anything, and cannot tell you whether you qualify for any program. It points you to official websites so you can ask. Asking for help is a good first step.</p></div>
-  <details id="staffInfo">
-   <summary>For college staff: add your college’s information</summary>
-   <p>Each college can add its own offices, programs, and websites so students see them first. Open this file in a text editor and find the block that starts with <code>const COLLEGE</code>. Fill in the name, the date you updated it, and (if you like) a county to choose automatically. Under <code>topics</code>, add items for each kind of help.</p>
-   <p>List offices and programs, not the names of people, because staff change. Use website links that start with <code>https://</code>. Leave a topic empty if your college does not offer that help.</p>
-   <pre>topics: {
-  food: [
-    { label: "Basic needs center",
-      url: "https://www.example.edu/basic-needs",
-      note: "Student Services Building, Room 100" }
-  ]
-}</pre>
-   <p>Topic names you can use: calfresh, food, internet, housing, health, mental, childcare, transport, legal, immigration, veterans, foster, jobs, money.</p>
-  </details>
   <form id="form" novalidate>
-   <h2 id="s1">Step 1: Choose your county</h2>
+   <h2 id="s1">Step 1: Choose your college</h2>
+   <label class="lbl" for="college">My college</label>
+   <p class="hint" id="collegeHint">If your college is not listed, choose the last choice. You will still get links for your county and California.</p>
+   <select id="college" aria-describedby="collegeHint"></select>
+   <h2 id="s1b" style="margin-top:1.5rem">Step 2: Check your county</h2>
    <label class="lbl" for="county">County where you live or need help</label>
-   <p class="hint" id="countyHint">If you are not sure, choose the last choice. You will still get links that work anywhere in California.</p>
+   <p class="hint" id="countyHint">Choosing a college fills in its county. You can change it. If you are not sure, choose the last choice.</p>
    <select id="county" aria-describedby="countyHint"></select>
-   <h2 id="s2" style="margin-top:1.5rem">Step 2: Choose the help you want</h2>
+   <h2 id="s2" style="margin-top:1.5rem">Step 3: Choose the help you want</h2>
    <fieldset id="topicSet"><legend>Choose all that apply</legend><div class="opts" id="topicOpts"></div></fieldset>
    <div id="err" class="err" role="alert"></div>
    <div class="row"><button type="submit" class="btn" id="goBtn">Show my links</button><button type="button" class="btn2" id="clearBtn">Clear my choices</button></div>
@@ -135,17 +126,6 @@ footer p{margin:0 0 .5rem}
  <p>Developed by Educational Management Resources Group (EMRG).</p>
 </footer>
 
-<script id="college-config">
-// COLLEGE STAFF: fill in this block. List offices and programs, not people.
-const COLLEGE = {
-  name: "",     // Example: "Example College"
-  updated: "",  // Example: "October 2026"
-  county: "",   // Optional. One of: alameda, kern, losangeles, orange, sacramento, eldorado, sanbernardino
-  topics: {
-    // food: [ { label: "Basic needs center", url: "https://www.example.edu/basic-needs", note: "Student Services Building, Room 100" } ],
-  }
-};
-</script>
 <script>
 // Verified-link data. Each link: [text, url, description]. Checked October 7, 2026.
 const L = (t,u,d)=>({t,u,d});
@@ -163,9 +143,13 @@ const TOPICS = [
  {id:"veterans",label:"Veterans services",college:"Ask for your college’s veterans services office."},
  {id:"foster",label:"Foster youth and kinship care",college:"Ask for your college’s foster youth or kinship care program."},
  {id:"jobs",label:"Jobs and career help",college:"Ask for your college’s career center or job placement office."},
+ {id:"tutoring",label:"Tutoring and academic support",college:"Ask what tutoring, writing, and math help your college offers."},
+ {id:"support",label:"Student support programs (such as EOPS, CalWORKs, disability services)",college:"Ask your student services office which support programs your college offers."},
  {id:"money",label:"Money for school, bills, and taxes",college:"Ask your coach or support team which supportive services and emergency aid your college offers, and whether there are limits."}
 ];
 const STATE = {
+ tutoring:[],
+ support:[],
  calfresh:[
   L("BenefitsCal: apply for CalFresh online","https://benefitscal.com/","The California website for applying online for CalFresh, Medi-Cal, and CalWORKs. The state’s Find benefits online page links to it."),
   L("GetCalFresh: free help by chat, text, or email","https://www.getcalfresh.org/en/","Run by Code for America, a nonprofit. You cannot apply on this site. It sends you to BenefitsCal."),
@@ -302,6 +286,344 @@ const COUNTIES = [
   childcare:[L("Child Care Resource Center: finding child care","https://www.ccrcca.org/parents/finding-child-care/","A nonprofit that the state lists as a child care referral agency with a San Bernardino office.")]})
 ];
 
+// College-specific links. Checked October 7, 2026. Only pages on the college's own site that loaded when fetched.
+// Item: L(text, url, description, warning?)  (warning = optional "page may be out of date" style note)
+const LW = (t,u,d,w)=>({t,u,d,w});
+const COLLEGES = [
+ {id:"bakersfield",name:"Bakersfield College (Panorama Campus)",county:"kern",checked:"October 7, 2026",
+  hub:[
+   L("Services and Resources","https://www.bakersfieldcollege.edu/services-and-resources/index.html","Lists the college’s student services and programs."),
+   L("Student Information Desk","https://www.bakersfieldcollege.edu/services-and-resources/contact.html","An online help desk, by Zoom, for admissions, financial aid, and advising and enrollment help.")],
+  topics:{
+   calfresh:[L("CalFresh Assistance","https://www.bakersfieldcollege.edu/services-and-resources/nexus/calfresh.html","Schedule a meeting with a college CalFresh assistant, in person or by Zoom, for help applying. Where: Office of Student Life, Campus Center.")],
+   food:[L("Renegade Nexus, the Basic Needs Center","https://www.bakersfieldcollege.edu/services-and-resources/nexus/index.html","Links to help with food, housing, technology, student parents, transportation, and community resources. Where: Campus Center, Office of Student Life."),
+         L("Food Resources, the Renegade Pantry","https://www.bakersfieldcollege.edu/services-and-resources/nexus/pantry.html","Free food, clothing, hygiene items, and school supplies, plus a monthly farmers market. Where: Campus Center, Room 130.")],
+   internet:[L("Technology Resources","https://www.bakersfieldcollege.edu/services-and-resources/nexus/technology-resources.html","Free campus Wi-Fi and a mobile hotspot program called California Connects.")],
+   housing:[L("Housing Assistance","https://www.bakersfieldcollege.edu/services-and-resources/nexus/housing.html","Local rental listings, emergency housing referrals through 211 Kern County, and roommate tips.")],
+   health:[L("Student Health and Wellness Center","https://www.bakersfieldcollege.edu/services-and-resources/student-health-wellness-center/index.html","Low-cost basic medical help and mental health support. Where: Administrative Services 102.")],
+   mental:[L("Student Health and Wellness Center: services","https://www.bakersfieldcollege.edu/services-and-resources/student-health-wellness-center/services.html","Medical care, counseling and crisis support, and health education.")],
+   childcare:[L("Child Development Center","https://www.bakersfieldcollege.edu/services-and-resources/child-development-center.html","Licensed care for children ages 18 months to 5 years. Where: 1801 Panorama Drive."),
+              L("Resources for Student Parents","https://www.bakersfieldcollege.edu/services-and-resources/nexus/resources-for-student-parents.html","Priority registration, financial aid, and child care options for student parents.")],
+   transport:[LW("Transportation","https://www.bakersfieldcollege.edu/campus-life/transportation.html","Information about Golden Empire Transit student bus passes, picked up at the Office of Student Life.","The page mentions free bus rides through June 2026. Check whether the offer continues.")],
+   immigration:[L("Legal services for undocumented students","https://www.bakersfieldcollege.edu/campus-life/student-communities/undocumented-students/legal-services.html","Free immigration legal services offered with the UFW Foundation and provided remotely."),
+                L("Undocumented Students","https://www.bakersfieldcollege.edu/campus-life/student-communities/undocumented-students/index.html","Counseling and academic support for undocumented students."),
+                L("AB 540 Student Support and Success Program","https://www.bakersfieldcollege.edu/services-and-resources/ab540/index.html","Services for students who qualify under California’s nonresident tuition exemption. Where: Center for Student Success, second floor.")],
+   veterans:[L("Vernon Valenzuela Veterans Resource Center","https://www.bakersfieldcollege.edu/campus-life/student-communities/veterans/veterans-resource-center.html","A veterans lounge, advising, a computer lab, and study space."),
+             L("Veteran Services","https://www.bakersfieldcollege.edu/campus-life/student-communities/veterans/index.html","Academic, financial, and career resources for veterans.")],
+   foster:[L("NextUp","https://bakersfieldcollege.edu/enrollment-aid/eops/nextup.html","A support program for current and former foster youth. Where: Student Services Center, east wing, second floor.")],
+   jobs:[L("Career Services","https://www.bakersfieldcollege.edu/services-and-resources/career-services/index.html","Career counseling, resume and job search tools, student job listings, and internship resources.")],
+   money:[L("Financial Aid","https://www.bakersfieldcollege.edu/enrollment-aid/financial-aid/index.html","Grants, scholarships, work-study, and loans. Where: Welcome Center.")],
+   tutoring:[L("Tutoring and Labs","https://www.bakersfieldcollege.edu/services-and-resources/tutoring-labs/index.html","Free tutoring through the Math Learning Center, Student Success Lab, Tutoring Center, and Writing Center."),
+             L("Tutoring Center","https://www.bakersfieldcollege.edu/services-and-resources/tutoring-labs/tutoring/index.html","Free tutoring at several campuses and by Zoom."),
+             L("Writing Center","https://www.bakersfieldcollege.edu/services-and-resources/tutoring-labs/writing-center/index.html","Free one-on-one writing support at four locations.")],
+   support:[L("Extended Opportunity Programs and Services (EOPS)","https://www.bakersfieldcollege.edu/enrollment-aid/eops/index.html","A support program. Where: Student Services Center, east wing, second floor."),
+            L("Cooperative Agencies Resources for Education (CARE)","https://www.bakersfieldcollege.edu/enrollment-aid/eops/care.html","A state-funded program that adds to EOPS."),
+            L("CalWORKs","https://www.bakersfieldcollege.edu/enrollment-aid/eops/calworks.html","The college’s CalWORKs program, in the same office as EOPS."),
+            L("Disabled Student Programs and Services (DSPS)","https://www.bakersfieldcollege.edu/services-and-resources/dsps/index.html","Accommodations for students with documented disabilities."),
+            L("TRIO Student Support Services","https://www.bakersfieldcollege.edu/services-and-resources/trio-student-support-services.html","A federally funded program at the Panorama Campus."),
+            L("Rising Scholars Program","https://www.bakersfieldcollege.edu/academics/rising-scholars-program/index.html","Support for students who are or were incarcerated.")]}},
+ {id:"saddleback",name:"Saddleback College (Mission Viejo)",county:"orange",checked:"October 7, 2026",
+  hub:[L("Student Support","https://www.saddleback.edu/student-support","Introduces tutoring, counseling, the library, career support, basic needs, health, child care, and technical help.")],
+  topics:{
+   calfresh:[L("Basic Needs Center","https://www.saddleback.edu/student-support/basic-needs-center","The page says staff can help with CalFresh applications. Where: College Center 102.")],
+   food:[L("Basic Needs Center","https://www.saddleback.edu/student-support/basic-needs-center","A food pantry, clothing closet, hygiene items and diapers, case worker appointments, textbook vouchers, and a Student Emergency Grant. Where: College Center 102. See the page for dates and how to sign up.")],
+   housing:[L("Basic Needs Center: housing and homelessness","https://www.saddleback.edu/student-support/basic-needs-center","Referrals to outside organizations. The page says the center does not place people in housing.")],
+   internet:[L("Technical Help","https://www.saddleback.edu/student-support/technical-help","A help desk, on-campus computers and printing, a Virtual Computer Lab, and Chromebook loans.")],
+   health:[L("Student Health and Wellness Center","https://www.saddleback.edu/student-support/student-health-wellness-center","A campus clinic with medical visits, telehealth, and mental health services. It does not provide emergency care. Where: College Center 177.")],
+   mental:[L("Counseling Services","https://www.saddleback.edu/student-support/counseling-services","Academic, career, and personal counseling. Where: Gateway 201-1."),
+           L("Student Health and Wellness Center","https://www.saddleback.edu/student-support/student-health-wellness-center","Includes mental health services. It does not provide emergency care.")],
+   childcare:[L("Child Care","https://www.saddleback.edu/student-support/child-care","The Child Development Center, with programs for children from 18 months to kindergarten.")],
+   transport:[L("Free Bus Pass","https://www.saddleback.edu/student-support/free-bus-pass","Unlimited OC Bus rides through the OC Bus app, supported by the Associated Student Government.")],
+   immigration:[L("Undocumented Students (Monarch Scholars)","https://www.saddleback.edu/student-support/specialized-programs/xxxxx/undocumented-students","Free immigration consultations with community partners, plus help with AB 540 and the California Dream Act Application."),
+                L("CHIRLA Legal Services","https://www.saddleback.edu/student-support/specialized-programs/undocumented-students/chirla-legal-services","Immigration consultations offered through the college’s community partners.")],
+   veterans:[L("Veterans Education and Transition Services (VETS)","https://www.saddleback.edu/student-support/specialized-programs/veterans-education-and-transition-services-vets","Veteran-specific counseling, financial aid guidance, and a Student Veterans Club. Where: Gateway 181.")],
+   foster:[L("Foster Scholars (NextUp and Guardian Scholars)","https://www.saddleback.edu/student-support/specialized-programs/extended-opportunity-programs-and-services-department/foster-scholars","Financial, academic, and personal support for current and former foster youth."),
+           L("Foster and Kinship Care Education","https://www.saddleback.edu/learning-saddleback/foster-and-kinship-care-education","Free classes for foster, adoptive, and kinship caregivers in Orange County.")],
+   jobs:[L("Career Support","https://www.saddleback.edu/student-support/career-support","Career inventories, educational planning, and job search help. Where: Career Resource Center, Gateway 271-2."),
+         L("Working on Campus","https://www.saddleback.edu/student-support/career-support/working-campus","On-campus student jobs, including work-study, posted on Handshake.")],
+   money:[L("Financial Aid Office","https://www.saddleback.edu/apply-pay/financial-aid","FAFSA and California Dream Act Application help, by phone, Zoom, or in person. Where: Gateway 111."),
+          L("Basic Needs Center: Student Emergency Grant","https://www.saddleback.edu/student-support/basic-needs-center","The page describes an emergency grant. See the page for dates and how to apply.")],
+   tutoring:[L("Tutoring Center","https://www.saddleback.edu/student-support/tutoring-center","Drop-in in-person and online tutoring. The page says you register for a zero-unit class first. Where: Learning Resource Center 212.")],
+   support:[L("Extended Opportunity Programs and Services (EOPS, CARE, and NextUp)","https://www.saddleback.edu/student-support/specialized-programs/extended-opportunity-programs-and-services-department","Describes EOPS, CARE, and NextUp. Where: Gateway 261-2."),
+            L("CalWORKs","https://www.saddleback.edu/student-support/specialized-programs/california-work-opportunity-and-responsibility-kids-calworks","Counseling, case management, and a work-study program for student parents."),
+            L("Disabled Students Programs and Services (DSPS)","https://www.saddleback.edu/student-support/specialized-programs/disabled-students-programs-and-services-dsps","Accommodations and a step-by-step process. Where: Gateway 161-1."),
+            L("Rising Scholars Program","https://www.saddleback.edu/student-support/specialized-programs/rising-scholars","Support for formerly incarcerated and system-impacted students. Where: College Center 106.")]}},
+ {id:"elac",name:"East Los Angeles College (Monterey Park)",county:"losangeles",checked:"October 7, 2026",
+  hub:[L("Student services offices","https://www.elac.edu/about/phone-directory","Lists student services offices, including Admissions and Records, Career and Job Services, Counseling, Financial Aid, and the Welcome Center.")],
+  topics:{
+   food:[L("Basic Needs Center","https://www.elac.edu/student-services/spr/basic-needs-center","Food distributions with the LA Regional Food Bank, a campus pantry, hygiene supplies, emergency hotel vouchers, food gift cards, and emergency grants. Where: F5-300. See the page for current days and times.")],
+   housing:[LW("Housing and Shelter","https://elac.edu/student-services/spr/student-health-center/housing-shelter","Lists community groups that help with housing and refers students to the Basic Needs Center.","The page may be out of date. Ask the Basic Needs Center.")],
+   internet:[L("Computers, Printing, and Technology","https://researchguides.elac.edu/computer","Open computer labs and laptop and Chromebook lending at the Tech Help Desk. The page was updated October 2, 2026.")],
+   health:[LW("Student Health Center","https://www.elac.edu/student-services/spr/student-health-center","Medical and therapy appointments through a campus clinic. Where: F5-302.","The page lists hours from 2023. Check the current hours.")],
+   mental:[L("Student Health Center: mental health","https://www.elac.edu/student-services/spr/student-health-center/mental-health","Telehealth therapy, support groups, and a support center for domestic violence and sexual assault. Where: F5-302.")],
+   childcare:[L("Child Development Center","https://elac.edu/student-services/spr/cdc/Admission-Priorities-Requirements-and-Fees","Child care for student parents, with a sliding fee scale. Where: A1 building."),
+              L("Student Parent Services","https://elac.edu/student-services/ab-2881","Lists campus and outside supports for student parents.")],
+   immigration:[L("Dream Resource Center services","https://elac.edu/student-services/spr/one-zone/drc/services","Free or low-cost attorney consultations and free immigration legal services for students, by appointment. Where: E1-142.")],
+   veterans:[LW("Veterans Resource Center","https://www.elac.edu/student-services/spr/veterans-resource-center","VA education benefit certification, counseling, an equipment loan program, and a peer advisor program.","The page still has an old notice about remote-only service. Check how to reach the center.")],
+   foster:[L("NextUp","https://elac.edu/student-services/spr/nextup","Support for current and former foster youth. Where: Student Services Building, E1-210."),
+           L("Foster and Kinship Care Education","https://www.elac.edu/student-services/spr/fkce/about","Education and support for caregivers of children and youth in out-of-home care.")],
+   jobs:[L("Career and Job Services Center","https://www.elac.edu/student-services/cjs/services","Career counseling, resume reviews, mock interviews, a job database, and a job fair. Where: E1-176."),
+         L("America’s Job Center of California at ELAC","https://elac.edu/academics/cewd/ajcc","Resume help and case management toward internships and jobs. Where: G1 Lobby.")],
+   money:[LW("Financial Aid and Scholarship","https://elac.edu/financial-aid","Fee waivers, grants, scholarships, work-study, and loans.","The page shows 2023-24 and 2024-25 dates. Check with the office for this year."),
+          L("Basic Needs Center: emergency grants","https://www.elac.edu/student-services/spr/basic-needs-center","The page says the ELAC Foundation offers emergency grants, including for laptops and hotspots, referred by faculty or staff.")],
+   tutoring:[LW("ELAC Tutoring Services","https://elac.edu/Academics/ELAC-Online-Tutoring-Services","Free tutoring through the Language Lab, Learning Center, Math Tutoring Lab, Reading and Writing Center, and other labs.","The page may be out of date."),
+             L("Learning Center","https://www.elac.edu/academic-services/learning-center","Tutoring by appointment. Where: E3-280.")],
+   support:[L("Extended Opportunity Programs and Services (EOPS)","https://www.elac.edu/student-services/spr/eops","A state-funded support program. Where: E1-227."),
+            L("CalWORKs","https://elac.edu/student-services/spr/calworks","Training and support services, priority registration, and case management. Where: Monterey Park Campus, A5."),
+            LW("Diversabilities Support Program and Services (DSP&S)","https://www.elac.edu/student-services/spr/dsps","Academic adjustments such as note-taking help and test proctoring.","The page may be out of date.")]}}
+];
+
+// Local (county and community) links added October 7, 2026. Merged into COUNTIES.
+// Rule: coverage limits are written into each description so students are not sent to the wrong area.
+const ADD = (cid, topic, links, first) => {
+  const c = COUNTIES.find(x => x.id === cid);
+  if (!c) throw new Error("Unknown county " + cid);
+  c.t[topic] = first ? links.concat(c.t[topic] || []) : (c.t[topic] || []).concat(links);
+};
+const LOCAL = {
+ losangeles: {
+  calfresh: [
+   L("LA Regional Food Bank: free CalFresh application help","https://www.lafoodbank.org/programs/calfresh/","The food bank’s outreach workers help you screen for, fill out, and submit a CalFresh application. The page says they work at pantries, community colleges, clinics, and libraries. Covers LA County."),
+   L("LA Regional Food Bank: ask for CalFresh help (form)","https://lafoodbank.org/calfresh-sign-up","A form to ask the food bank’s CalFresh outreach program to contact you about applying."),
+   L("LA County CalFresh outreach","https://dpss.lacounty.gov/en/food/calfresh/cfnp_outreach.html","The county says community groups such as the LA Regional Food Bank can help you submit an application. Most of this page is for people who want to become application helpers.")
+  ],
+  food: [
+   L("LA Regional Food Bank: find a food pantry near you","https://www.lafoodbank.org/find-food/","Enter your address to look for partner pantries, soup kitchens, and senior centers across LA County. Call ahead to confirm hours."),
+   L("LA Regional Food Bank: how to find a food pantry","https://www.lafoodbank.org/how-to-find-a-food-pantry/","A short article on using the food bank’s address search or dialing 211. This is an older page (2022), so use the finder above first."),
+  ],
+  housing: [
+   L("LAHSA: get help with homelessness","https://www.lahsa.org/get-help","The Los Angeles Homeless Services Authority. Lists Access Centers where you can start getting housing help, and links for veterans, domestic violence, and safe parking."),
+   L("LA County Homeless Services and Housing: get help","https://homeless.lacounty.gov/get-help/","County page that points to outreach, prevention resources, and an eviction-prevention guide. Last modified September 15, 2026."),
+   L("Stay Housed LA","https://stayhousedla.org","Tenant rights information, workshops and clinics, and a way to find free legal help with eviction. A partnership of the County, the City of LA, and legal aid groups."),
+   L("LAFLA: housing and eviction help","https://lafla.org/get-help/housing-and-eviction/","Legal Aid Foundation of Los Angeles. Free legal help for tenants, including eviction, repairs, and Section 8 problems. Greater Los Angeles.")
+  ],
+  health: [
+   L("LA County health services locator","https://locator.lacounty.gov/health","Search by address for urgent care, health centers, mental health, addiction treatment, and more."),
+   L("LA County public health clinics","https://publichealth.lacounty.gov/chs/phcenters.htm","Sexual health clinics, nurse clinics for vaccines and TB tests, and referral-only clinics. Does not cover Long Beach or Pasadena, which have their own health departments.")
+  ],
+  mental: [
+   L("LA County Department of Mental Health: get help now","https://dmh.lacounty.gov/get-help/","The county’s 24/7 help line, crisis lines, and links for teens and young adults. Last modified May 19, 2026.")
+  ],
+  internet: [
+   L("Get Connected LA: low-cost internet and devices","https://getconnected.lacity.gov/digital-resources","City of Los Angeles list of internet options, device programs, and digital skills classes. Focused on the City of LA; some offers are not city-specific."),
+   L("Get Connected LA: free public Wi-Fi map","https://getconnected.lacity.gov/digital-asset-map","Lists free Wi-Fi sites in the City of LA, including all LA Public Library branches."),
+   L("LA Public Library: Tech2Go","https://lapl.org/tech2go","Borrow Chromebooks and hotspots with a library card. City of LA library branches only; the LA County Library link above is a different system.")
+  ],
+  legal: [
+   L("LAFLA: get legal help","https://lafla.org/get-help/","Legal Aid Foundation of Los Angeles. Apply for free legal help online, by phone, or in person. Greater Los Angeles."),
+   L("Neighborhood Legal Services of LA County: help for tenants","https://nlsla.org/tenant-services","Free help with eviction, repairs, and rent increases, with guides in four languages."),
+   L("Neighborhood Legal Services of LA County: public benefits help","https://nlsla.org/services/public-benefits/","Help getting and keeping benefits such as CalFresh, CalWORKs, and General Relief."),
+   L("Public Counsel: get help","https://publiccounsel.org/get-help-2/","A nonprofit law firm. Routes you to help with eviction, debt, student loans, immigration, and family matters.")
+  ],
+  immigration: [
+   L("LA County Office of Immigrant Affairs: legal help programs","https://oia.lacounty.gov/for-organizations","Describes RepresentLA and the Mobile Immigration Program. The page is titled “For Organizations,” but it explains the legal help programs. Last modified April 4, 2026.")
+  ],
+  jobs: [
+   L("LA County job centers (AJCC)","https://ajcc.lacounty.gov/ajcc","A table of about 17 job center sites with addresses. Covers the county outside the City of LA’s own centers."),
+   L("City of LA WorkSource Centers","https://ewdd.lacity.gov/index.php/employment-services/worksource-centers","Lists the City of LA’s job centers by area, with addresses and languages."),
+   L("LA County Library: job help","https://lacountylibrary.org/jobhelp/","Free online courses, job coaching, and resume help with an LA County Library card. Last modified June 5, 2026.")
+  ],
+  childcare: [
+   L("LA County Office for the Advancement of Early Care and Education: Child Care Choices","https://childcare.lacounty.gov/childcarechoices/","A county program to help families find child care. The page says the voucher part is limited to certain ZIP codes. Read it before relying on it.")
+  ],
+  money: [
+   L("United Way of Greater LA: free tax help","https://unitedwayla.org/our-work/supporting-people-in-crisis/income-tax-assistance/","Describes free volunteer tax preparation (VITA) and points to the Free Tax Prep LA site. The page was last modified in January 2025."),
+   L("Free Tax Prep LA","https://www.freetaxprepla.com","A coalition site to find free tax preparation locations. The site may not be fully up to date, so check dates."),
+   L("SoCalGas: help with energy bills","https://www.socalgas.com/billing-payment/assistance-programs/low-income-home-energy-assistance-program","Describes bill help and weatherization for SoCalGas customers. Page dated July 2024.")
+  ]
+ },
+ orange: {
+  calfresh: [
+   L("Second Harvest Food Bank of Orange County: get help (includes CalFresh help)","https://feedoc.org/get-help","The page describes CalFresh help through 211 OC, plus the pantry map and summer and kids’ meal sites. Covers Orange County. Page modified September 22, 2026.")
+  ],
+  food: [
+   L("Second Harvest Food Bank of Orange County: find a pantry","https://feedoc.org/need-food/","A map of nearly 300 partner pantries you can search by city, ZIP, or name. List dated September 14, 2026."),
+   L("Second Harvest Food Bank of Orange County: get help","https://feedoc.org/get-help","Pantry map and list, kids’ and summer meal sites, and CalFresh help.")
+  ],
+  housing: [
+   L("OC Coordinated Entry System","https://ceo.oc.gov/care-coordination/homeless-services/coordinated-entry-system-ces","How to reach a Coordinated Entry access point or 211 for help with rehousing and supportive housing. County of Orange Office of Care Coordination."),
+   L("OC Shelter Bed Reservation System","https://ceo.oc.gov/care-coordination/homeless-services/coordinated-entry-system/shelter-bed-reservation-system","How adults and families are referred to county emergency shelter beds."),
+   L("Fair Housing Council of Orange County: landlord and tenant help","https://www.fairhousingoc.org/landlordtenant/","Counseling on deposits, repairs, rent increases, and notices.")
+  ],
+  health: [
+   L("OC Health Care Agency: community clinics","https://ochealthinfo.com/node/3786","County public health clinic services, with a pointer to a list of low-cost community health centers. No search tool on the page.")
+  ],
+  mental: [
+   L("OC Links: mental health and substance use help","https://www.ochealthinfo.com/OCLINKS","A free, confidential phone and chat line that connects to counseling, treatment, and mobile crisis help.")
+  ],
+  legal: [
+   L("Community Legal Aid SoCal: get help","https://www.communitylegalsocal.org/help-yourself/","A nonprofit serving Orange and southeast LA Counties. Free workshops, a hotline, and an online intake link. Modified May 15, 2026."),
+   L("Public Law Center: need help","https://www.publiclawcenter.org/need-help/","A Santa Ana nonprofit that provides free civil legal aid. This page is older, so confirm details when you call.")
+  ],
+  jobs: [
+   L("OC Workforce Solutions: center locations","https://www.ocworkforcesolutions.com/contact","Career service sites in Brea, Laguna Niguel, Los Alamitos, Anaheim, and Santa Ana, with hours."),
+   L("OC Workforce Solutions: events and services","https://www.ocworkforcesolutions.com/","Job seeker services plus workshops and hiring events listed through December 2026.")
+  ],
+  money: [
+   L("OC Free Tax Prep: locations","https://ocfreetaxprep.com/locations","Free tax preparation sites searchable by city or ZIP. Most sites close after tax season, so check back in January."),
+   L("Community Action Partnership of Orange County: help with utility bills","https://www.capoc.org/addressing-immediate-needs/","Heating and cooling bill help (LIHEAP) with an online application. Page modified September 16, 2026.")
+  ]
+ },
+ alameda: {
+  calfresh: [
+   L("Alameda County Community Food Bank: CalFresh help","https://www.accfb.org/calfresh-community-stories/","The page says the food bank can help with CalFresh applications. It is mostly stories, not a how-to page, so contact the food bank to ask. Published May 21, 2026.")
+  ],
+  food: [
+   L("Alameda County Community Food Bank","https://www.accfb.org/new-agency/","Main page for the county food bank. It points to foodnow.net as its food finder."),
+   L("City of Oakland: food distribution","https://www.oaklandca.gov/Community/Food-Services/Food-Distribution-in-Oakland","Pantries, grocery distributions, and hot meals by neighborhood, plus other Alameda County cities. Schedules vary, so call ahead.")
+  ],
+  housing: [
+   L("Alameda County Housing Resource Center access points","https://health.alamedacountyca.gov/program/housing-resource-center-hrc-access-points/","Named sites by region (Oakland, Alameda, Hayward, Berkeley) and a center for young adults. Modified June 29, 2026."),
+   L("Alameda County Housing and Homelessness Services","https://health.alamedacountyca.gov/?p=1087","County overview that points to 211 and Housing Resource Centers. Modified July 30, 2026.")
+  ],
+  health: [
+   L("Alameda County HealthPAC","https://health.alamedacountyca.gov/program/healthpac/","How to enroll in low-cost care for people without insurance. Modified June 9, 2026.")
+  ],
+  mental: [
+   L("Alameda County Behavioral Health: access and referrals","https://health.alamedacountyca.gov/division/access-support-referrals/","The 24-hour referral line that is the starting point for county behavioral health care.")
+  ],
+  legal: [
+   L("Alameda County Law Library: tenant and eviction referral sheet","https://lawlibrary.alamedacountyca.gov/project/tenant-and-eviction-referral-sheet/","Referrals to East Bay Community Law Center, Bay Area Legal Aid, Centro Legal de la Raza, and ECHO Housing. Updated April 20, 2026."),
+   L("Bay Area Legal Aid: get help","https://baylegal.org/get-help/","A legal advice line and tenants’ rights line for Alameda County. Modified July 27, 2026."),
+   L("East Bay Community Law Center: housing services","https://ebclc.org/get-help/housing-services/","Eviction defense and tenant rights help. Serves Berkeley, Oakland, Emeryville, and the City of Alameda only."),
+   L("City of Oakland: tenant resources","https://www.oaklandca.gov/Community/Housing-Programs-Support/Tenant-Rights-Protection/Tenant-Resources","Oakland eviction and rent rules and providers. Oakland only.")
+  ],
+  jobs: [
+   L("EASTBAYWorks: workforce center locations","https://www.eastbayworks.com/locations/","Job centers including Hayward and three in Oakland. This site covers Alameda and nearby East Bay counties.")
+  ],
+  money: [
+   L("Alameda County Social Services: free tax preparation","https://socialservices.alamedacountyca.gov/our-services/Work-and-Money/Other-Support/tax-services","Three sites in Oakland and Hayward. The page says the 2026–2027 season runs February 2 to April 15, 2027, by appointment."),
+   L("Spectrum Community Services: help with gas and electric bills","https://www.spectrumcs.org/energy-services/liheap","How to apply online or by mail for LIHEAP in Alameda County. Updated December 30, 2025.")
+  ],
+  transport: [
+   L("Clipper START (Bay Area low-income fare discount)","https://mtc.ca.gov/planning/transportation/access-equity-mobility/clipperr-startsm","Explains the discount program and links to the application. Updated June 25, 2026.")
+  ]
+ },
+ sanbernardino: {
+  calfresh: [
+   L("Feeding America Riverside | San Bernardino: CalFresh application help","https://www.feedingamericaie.org/calfresh","Free help completing and submitting a CalFresh application. Covers Riverside and San Bernardino Counties.")
+  ],
+  food: [
+   L("Feeding America Riverside | San Bernardino: find a pantry","https://www.feedingamericaie.org/find-a-pantry","Type in an address to find a nearby free food distribution site. Covers Riverside and San Bernardino Counties."),
+   L("Feeding America Riverside | San Bernardino: get help","https://www.feedingamericaie.org/get-help","Pantry finder, monthly distribution calendar, and CalFresh help."),
+   L("San Bernardino County Public Health: food assistance by region","https://dph.sbcounty.gov/community-resources/","Pantry and meal sites by region, including eight High Desert sites in Victorville, Hesperia, Apple Valley, and Barstow. Schedules change, so call first.")
+  ],
+  housing: [
+   L("San Bernardino County housing and rental resources","https://cdh.sbcounty.gov/housing-rental-resources/","Affordable housing lists, housing counseling, and tenant rights services."),
+   L("San Bernardino County Homeless Partnership: resources","https://sbchp.sbcounty.gov/resources/","Explains 211 as the entry point and lists regional access points, including one for the desert area.")
+  ],
+  health: [
+   L("San Bernardino County Public Health: resource guide 2026","https://dph.sbcounty.gov/wp-content/uploads/sites/7/DPH-Resource-Guide-2026.pdf","A PDF of public health programs and health centers, including in Adelanto and Hesperia.")
+  ],
+  mental: [
+   L("San Bernardino County Behavioral Health: outpatient clinics","https://wp.sbcounty.gov/dbh/outpatient/","Clinics grouped by region, including Victorville and Apple Valley, with weekday hours.")
+  ],
+  legal: [
+   L("San Bernardino County Bar Association: legal aid","https://www.sbcba.org/legal-aid","Legal aid programs for the Inland Empire and High Desert, including a Victorville office listing.")
+  ],
+  jobs: [
+   L("San Bernardino County job centers (AJCC)","https://workforce.sbcounty.gov/job-seekers/","Lists the High Desert center in Victorville and other sites, with hours. Hesperia and Barstow are not listed.")
+  ],
+  money: [
+   L("San Bernardino County free tax help (VITA)","https://wp.sbcounty.gov/tad/vita-new","Free tax prep sites in Apple Valley, Hesperia, Phelan, Victorville, and Barstow. Shows the 2026 season, so check again in January 2027."),
+   L("Community Action Partnership of San Bernardino County: Home Energy Assistance Program","https://www.capsbc.org/home-energy-assistance-program-heap","How to book an appointment for help with energy bills. The page does not say whether High Desert residents are served, so ask when you call.")
+  ]
+ },
+ kern: {
+  calfresh: [
+   L("Catholic Charities (Bakersfield): CalFresh application help","https://ccdof.org/cal-fresh-food-stamps/","Help applying for and renewing CalFresh at the Bakersfield office. Bakersfield only; the page does not name other areas.")
+  ],
+  food: [
+   L("Community Action Partnership of Kern: find food pantries","https://www.capk.org/food-bank/","A food map with filters and hours. The page mentions over 200 distribution points across Kern County. Modified September 23, 2026."),
+   L("Catholic Charities (Bakersfield): food pantry","https://ccdof.org/food-pantry/","Weekly food boxes from the Bakersfield office. Bakersfield only.")
+  ],
+  housing: [
+   L("Kern Coordinated Entry System","https://www.capk.org/programs/programs-coordinatedentrysystem/","How people without housing get connected to shelter and services, starting through 211."),
+   L("Kern Housing Authority","https://kernha.org","Housing program list, a housing locator, and application links."),
+   L("Kern Housing Authority: waiting lists","https://kernha.org/waiting-list-information/","How the voucher and public housing waiting lists work. It does not say whether a list is open.")
+  ],
+  legal: [
+   L("California Rural Legal Assistance: office list","https://crla.org/locations","Office addresses. The page lists Delano and Lamont as Kern County offices; Bakersfield and Arvin are not listed."),
+   L("LawHelpCA: find legal help by county","https://www.lawhelpca.org/find-legal-help","A statewide search for local legal aid by city, county, or ZIP code. Use this if the offices above are too far.")
+  ],
+  jobs: [
+   L("America’s Job Center of Kern: locations","https://www.americasjobcenterofkern.com/contact-locations.asp","Center addresses by city, including Bakersfield and Delano. Arvin is not listed; Lamont and Shafter are."),
+   L("America’s Job Center of Kern","https://www.americasjobcenterofkern.com","Job seeker services, workshops, and a resource guide in English and Spanish.")
+  ],
+  money: [
+   L("Community Action Partnership of Kern: free tax help","https://www.capk.org/vita/","Free tax preparation and e-filing. The page lists the main Bakersfield site; other sites are behind a Locations link."),
+   L("Community Action Partnership of Kern: energy bill help","https://energy.capk.org/","Utility bill assistance and weatherization, with how to apply.")
+  ]
+ },
+ sacramento: {
+  calfresh: [
+   L("Sacramento Food Bank: free CalFresh help","https://www.sacramentofoodbank.org/calfresh","Help checking whether to apply and completing the application. Covers Sacramento County."),
+   L("River City Food Bank: CalFresh help","https://rivercityfoodbank.org/calfresh/","One-on-one help with applications, renewals, and BenefitsCal, with walk-in hours. Midtown Sacramento and Arden-Arcade sites only; not Folsom or Rancho Cordova.")
+  ],
+  food: [
+   L("Sacramento Food Bank: find food","https://sacramentofoodbank.org/find-food","A food finder for distribution sites near you. Covers Sacramento County. The finder may not load in every browser."),
+   L("River City Food Bank","https://www.rivercityfoodbank.org","Emergency food at two Sacramento sites, with days and hours. Midtown and Arden-Arcade only; not Folsom or Rancho Cordova.")
+  ],
+  housing: [
+   L("Sacramento County: how to get help (shelter and housing)","https://schs.saccounty.gov/us/en/how-to-get-help.html","Where to find shelter, youth drop-in help, and affordable housing help."),
+   L("Sacramento Housing and Redevelopment Agency: find housing","https://www.shra.org/find-housing/","How to join the housing waitlist online, with links to voucher and public housing information."),
+   L("Sacramento housing resources guide","https://sachousingguide.org","Housing resources by topic, including landlord and tenant help and shelter. The page does not name its author.")
+  ],
+  health: [
+   L("Sacramento County public health services","https://dhs.saccounty.gov/us/en/public-health.html","Public health services, including free flu vaccine clinics. No clinic address list."),
+   L("Sacramento County primary health services","https://dhs.saccounty.gov/content/dhs/us/en/primary-health/primary-health-services.html","Describes the county health center and programs for people without insurance.")
+  ],
+  mental: [
+   L("Sacramento County behavioral health","https://dhs.saccounty.gov/content/dhs/us/en/behavioral-health.html","Crisis options, a 24/7 screening line, and service pages."),
+   L("Sacramento County mental health crisis services","https://dhs.saccounty.gov/content/dhs/us/en/behavioral-health/behavioral-health-services/crisis-services.html","Describes the Community Wellness Response Team and the walk-in Mental Health Urgent Care Clinic.")
+  ],
+  legal: [
+   L("Legal Services of Northern California","https://lsnc.net/how-contact-us","Free civil legal help for low-income people in 23 counties. The page is older (2021), so confirm details."),
+   L("Legal Services of Northern California: self-help topics","https://lsnc.net/self-help","Self-help guides on eviction, Section 8, CalFresh, Medi-Cal, and more. The page says it does not handle immigration or family law.")
+  ],
+  jobs: [
+   L("Sacramento Works: find a job center","https://sacworks.seta.net/job-centers/","Search by address or ZIP to find a center. Run by the Sacramento Employment and Training Agency."),
+   L("Sacramento Works","https://sacworks.seta.net/","Job seeker services. Modified September 24, 2026.")
+  ],
+  internet: [
+   L("Sacramento Public Library: visit us","https://www.saclibrary.org/visit-us","Branch finder. The library’s 2024 notice says it offers free Wi-Fi, onsite computers, and Chromebook checkout; confirm what is available now."),
+  ]
+ },
+ eldorado: {
+  food: [
+   L("Food Bank of El Dorado County: find a food distribution site","https://www.foodbankedc.org/find-a-food-distribution-site","A ZIP code search for distribution sites and a link to a distribution calendar. Covers El Dorado County and South Lake Tahoe."),
+   L("Food Bank of El Dorado County: get help","https://www.foodbankedc.org/get-help/","Programs including emergency food and a network of local food closets."),
+   L("Feeding the Foothills: get food","https://feedingthefoothills.org/get-food/","A list of food distribution agencies across El Dorado, Placer, and Nevada Counties.")
+  ],
+  housing: [
+   L("El Dorado County: housing and homelessness","https://www.eldoradocounty.ca.gov/Services/Assistance-Programs/Housing-Energy-Assistance/Housing-and-Homelessness","Information on the Navigation Center shelter and the Public Housing Authority voucher program."),
+   L("El Dorado Navigation Center","https://www.voa-ncnn.org/locations/el-dorado-navigation-center/","A shelter for adults run by Volunteers of America. The page says it is by referral, not walk-in.")
+  ],
+  health: [
+   L("El Dorado County Public Health","https://www.eldoradocounty.ca.gov/Health-Well-Being/Public-Health","Immunization and clinic services, with a Placerville office.")
+  ],
+  mental: [
+   L("El Dorado County Behavioral Health","https://www.eldoradocounty.ca.gov/Health-Well-Being/Behavioral-Health","Clinic offices, 24/7 access and crisis options, and a provider directory.")
+  ],
+  legal: [
+   L("Legal Services of Northern California","https://lsnc.net/how-contact-us","Free civil legal help for low-income people. The page says its Auburn office covers El Dorado County. The page is older (2021), so confirm details.")
+  ],
+  jobs: [
+   L("Golden Sierra Job Training Agency","https://goldensierra.com/","The workforce board for Alpine, El Dorado, and Placer Counties. The only office listed is in Roseville."),
+   L("El Dorado County: Employment Resource Centers","https://www.eldoradocounty.ca.gov/Services/Assistance-Programs/Financial-Employment-Services/Employment-Services/Employment-Resource-Centers","Lists the Placerville Employment Resource Center. The page says it is being updated and gives no address.")
+  ],
+  money: [
+   L("El Dorado County: Home Energy Assistance Program","https://www.eldoradocounty.ca.gov/Services/Assistance-Programs/Housing-Energy-Assistance/Home-Energy-Assistance-Program","Help with energy bills and heating fuel, with how to apply. Covers El Dorado and Alpine Counties.")
+  ]
+ }
+};
+for (const cid in LOCAL) for (const tp in LOCAL[cid]) ADD(cid, tp, LOCAL[cid][tp], tp!=="money" || true);
+// 211 links confirmed through 211 California’s “Find Your 211” page
+const L211S = L("211 Sacramento","https://211sacramento.org/211/","211 California’s list names Community Link Capital Region as the 211 provider for Sacramento County. We could not open this site to check its content.");
+const L211E = L("211 El Dorado County","https://211eldorado.org/","211 California’s list names the County of El Dorado as the provider. The site has little detail, so you may need to call.");
+["food","housing","money"].forEach(t=>{ ADD("sacramento",t,[L211S]); ADD("eldorado",t,[L211E]); });
+COUNTIES.forEach(c=>{ delete c.t._no211; });
+
 (function(){
  var CHECKED = "October 7, 2026";
  function el(tag, attrs){
@@ -311,15 +633,22 @@ const COUNTIES = [
   return n;
  }
  var $ = function(id){ return document.getElementById(id); };
- var form=$("form"), county=$("county"), topicOpts=$("topicOpts"), err=$("err"), results=$("results"), formArea=$("formArea");
+ var form=$("form"), college=$("college"), county=$("county"), topicOpts=$("topicOpts"), err=$("err"), results=$("results"), formArea=$("formArea");
  $("checked").textContent = CHECKED;
+
+ // College choices
+ var sortedCol = COLLEGES.slice().sort(function(a,b){ return a.name < b.name ? -1 : 1; });
+ college.appendChild(el("option",{value:"",text:"Choose a college"}));
+ sortedCol.forEach(function(c){ college.appendChild(el("option",{value:c.id,text:c.name})); });
+ college.appendChild(el("option",{value:"other",text:"My college is not listed"}));
 
  // County choices
  var sorted = COUNTIES.slice().sort(function(a,b){ return a.name < b.name ? -1 : 1; });
  county.appendChild(el("option",{value:"",text:"Choose a county"}));
  sorted.forEach(function(c){ county.appendChild(el("option",{value:c.id,text:c.name})); });
  county.appendChild(el("option",{value:"other",text:"Not sure, or a county not listed"}));
- if(COLLEGE.county){ for(var q=0;q<county.options.length;q++){ if(county.options[q].value===COLLEGE.county){ county.selectedIndex=q; } } }
+ function setCounty(v){ for(var q=0;q<county.options.length;q++){ if(county.options[q].value===v){ county.selectedIndex=q; return; } } }
+ college.addEventListener("change",function(){ var c=collegeById(college.value); if(c && c.county){ setCounty(c.county); } });
 
  // Topic checkboxes
  TOPICS.forEach(function(t){
@@ -328,35 +657,34 @@ const COUNTIES = [
  });
 
  function selectedTopics(){ return TOPICS.filter(function(t){ return $("t_"+t.id).checked; }); }
- function safeUrl(u){ return typeof u==="string" && /^https:\/\//i.test(u); }
  function countyById(id){ for(var i=0;i<COUNTIES.length;i++){ if(COUNTIES[i].id===id) return COUNTIES[i]; } return null; }
+ function collegeById(id){ for(var i=0;i<COLLEGES.length;i++){ if(COLLEGES[i].id===id) return COLLEGES[i]; } return null; }
 
  function linkItem(l){
-  return el("li",null,
-   el("a",{href:l.u,target:"_blank",rel:"noopener noreferrer"}, l.t, el("span",{"class":"sr",text:" (opens in a new tab)"})),
-   el("span",{"class":"d",text:l.d}));
- }
- function collegeItem(it){
-  var kids=[];
-  if(safeUrl(it.url)){ kids.push(el("a",{href:it.url,target:"_blank",rel:"noopener noreferrer"}, it.label||it.url, el("span",{"class":"sr",text:" (opens in a new tab)"}))); }
-  else { kids.push(el("strong",{text:it.label||""})); }
-  if(it.note){ kids.push(el("span",{"class":"d",text:it.note})); }
+  var kids=[el("a",{href:l.u,target:"_blank",rel:"noopener noreferrer"}, l.t, el("span",{"class":"sr",text:" (opens in a new tab)"})),
+   el("span",{"class":"d",text:l.d})];
+  if(l.w){ kids.push(el("span",{"class":"d",text:"Note: "+l.w})); }
   return el("li",null,kids);
  }
- function countyLinks(c, topicId){
-  if(!c) return [];
-  var out = (c.t[topicId]||[]).slice();
-  return out;
- }
+ function linesFor(list){ return list.map(function(l){ return "- "+l.t+" "+l.u+(l.w?" (Note: "+l.w+")":""); }); }
 
  var lastText = "";
  function build(){
   var body=$("resBody"); body.textContent="";
   var topics=selectedTopics(), cid=county.value, c=(cid&&cid!=="other")?countyById(cid):null;
+  var col=collegeById(college.value);
   var cname = c ? c.name : "Not sure or not listed";
-  $("resSummary").textContent = "County: " + cname + ". Help you chose: " + topics.map(function(t){return t.label;}).join(", ") + ".";
-  var text=["Find Help Near Me","County: "+cname,"Links checked "+CHECKED,""];
+  var colname = col ? col.name : "My college";
+  $("resSummary").textContent = (col?"College: "+col.name+". ":"")+"County: " + cname + ". Help you chose: " + topics.map(function(t){return t.label;}).join(", ") + ".";
+  var text=["Find Help Near Me",(col?"College: "+col.name:"College: not listed"),"County: "+cname,"Links checked "+CHECKED,""];
+  if(!col){ body.appendChild(el("div",{"class":"note"},el("p",{text:"Your college is not listed yet, so you will see links for your county and California. Ask your college’s student services office what is on your campus."}))); }
   if(!c){ body.appendChild(el("div",{"class":"note"},el("p",{text:"Your county is not listed yet, so you will see links that work anywhere in California. 211 can point you to local help. Your county’s social services office is listed in the CalFresh links."}))); }
+  if(col && col.hub && col.hub.length){
+   var hs=el("section",{"class":"topic","aria-labelledby":"h_hub"});
+   hs.appendChild(el("h3",{id:"h_hub",text:"Student services at "+col.name}));
+   hs.appendChild(el("ul",{"class":"links"},col.hub.map(linkItem)));
+   body.appendChild(hs); text.push("STUDENT SERVICES AT "+col.name.toUpperCase()); text=text.concat(linesFor(col.hub)); text.push("");
+  }
   topics.forEach(function(t){
    var sec=el("section",{"class":"topic","aria-labelledby":"h_"+t.id});
    sec.appendChild(el("h3",{id:"h_"+t.id,text:t.label}));
@@ -364,27 +692,26 @@ const COUNTIES = [
    if(t.safety){ sec.appendChild(el("div",{"class":"warn",role:"note"},el("p",{text:t.safety}))); text.push(t.safety); }
    if(t.note){ sec.appendChild(el("div",{"class":"note",role:"note"},el("p",{text:t.note}))); text.push(t.note); }
    // College
-   var cItems=(COLLEGE.topics&&COLLEGE.topics[t.id])||[];
-   sec.appendChild(el("h4",{text:COLLEGE.name?("At "+COLLEGE.name):"At my college"}));
-   text.push("At "+(COLLEGE.name||"my college")+":");
+   var cItems=(col&&col.topics&&col.topics[t.id])||[];
+   sec.appendChild(el("h4",{text:col?("At "+col.name):"At my college"}));
+   text.push("At "+colname+":");
    if(cItems.length){
-    sec.appendChild(el("ul",{"class":"links"},cItems.map(collegeItem)));
-    cItems.forEach(function(it){ text.push("- "+(it.label||"")+(safeUrl(it.url)?" "+it.url:"")+(it.note?" ("+it.note+")":"")); });
-    if(COLLEGE.updated){ sec.appendChild(el("p",{"class":"empty",text:"College information updated "+COLLEGE.updated+"."})); }
+    sec.appendChild(el("ul",{"class":"links"},cItems.map(linkItem))); text=text.concat(linesFor(cItems));
+    if(col.checked){ sec.appendChild(el("p",{"class":"empty",text:"College links checked "+col.checked+"."})); }
    } else {
-    sec.appendChild(el("p",{"class":"empty",text:(COLLEGE.name?COLLEGE.name+" has not added this yet. ":"Your college has not added this yet. ")+t.college}));
-    text.push("- "+t.college);
+    var m=(col?"No page was found for "+col.name+" yet. ":"Your college has not added this yet. ")+t.college;
+    sec.appendChild(el("p",{"class":"empty",text:m})); text.push("- "+m);
    }
    // County
-   var cl=countyLinks(c,t.id);
-   var cn=c?c.name:null;
+   var cl=(c&&c.t[t.id])||[];
    if(c){
-    sec.appendChild(el("h4",{text:"In "+cn}));
-    text.push("In "+cn+":");
-    if(cl.length){ sec.appendChild(el("ul",{"class":"links"},cl.map(linkItem))); cl.forEach(function(l){ text.push("- "+l.t+" "+l.u); }); }
+    sec.appendChild(el("h4",{text:"In "+c.name}));
+    text.push("In "+c.name+":");
+    if(cl.length){ sec.appendChild(el("ul",{"class":"links"},cl.map(linkItem))); text=text.concat(linesFor(cl)); }
     else {
-     var msg="No county links are listed for this topic yet. Try the California links below.";
-     if(c.t._no211 && (t.id==="food"||t.id==="housing"||t.id==="money")){ msg="No county 211 link is listed yet. Use 211 California below to find your local 211."; }
+     var msg="No county links are listed for this topic yet.";
+     if(c.t._no211 && (t.id==="food"||t.id==="housing"||t.id==="money")){ msg="No county 211 link is listed yet. Use 211 California to find your local 211."; }
+     if((STATE[t.id]||[]).length){ msg+=" Try the California links below."; }
      sec.appendChild(el("p",{"class":"empty",text:msg})); text.push("- "+msg);
     }
    }
@@ -393,7 +720,7 @@ const COUNTIES = [
    if(sl.length){
     sec.appendChild(el("h4",{text:"Across California"}));
     sec.appendChild(el("ul",{"class":"links"},sl.map(linkItem)));
-    text.push("Across California:"); sl.forEach(function(l){ text.push("- "+l.t+" "+l.u); });
+    text.push("Across California:"); text=text.concat(linesFor(sl));
    } else if(t.id==="transport"){
     sec.appendChild(el("p",{"class":"empty",text:"Transit passes and fares are set by each local transit agency, so there are no California-wide links for this topic. If your local agency is not listed, search the agency’s website for student or reduced fares, or ask your college."}));
    }
@@ -405,18 +732,19 @@ const COUNTIES = [
 
  form.addEventListener("submit",function(e){
   e.preventDefault(); err.textContent="";
-  var msgs=[];
-  if(!county.value){ msgs.push("Choose a county in Step 1. If you are not sure, choose the last choice."); }
-  if(!selectedTopics().length){ msgs.push("Choose at least one kind of help in Step 2."); }
+  var msgs=[], first=null;
+  if(!college.value){ msgs.push("Choose your college in Step 1. If it is not listed, choose the last choice."); first=college; }
+  if(!county.value){ msgs.push("Choose a county in Step 2. If you are not sure, choose the last choice."); first=first||county; }
+  if(!selectedTopics().length){ msgs.push("Choose at least one kind of help in Step 3."); first=first||$("t_"+TOPICS[0].id); }
   if(msgs.length){
    err.appendChild(el("div",{"class":"warn"}, msgs.map(function(m){ return el("p",{text:m,style:"margin:0 0 .25rem"}); })));
-   if(!county.value){ county.focus(); } else { $("t_"+TOPICS[0].id).focus(); }
+   first.focus();
    return;
   }
   build(); formArea.hidden=true; results.hidden=false; $("resTitle").focus(); window.scrollTo(0,0);
  });
  $("clearBtn").addEventListener("click",function(){
-  TOPICS.forEach(function(t){ $("t_"+t.id).checked=false; }); county.selectedIndex=0; err.textContent=""; county.focus();
+  TOPICS.forEach(function(t){ $("t_"+t.id).checked=false; }); college.selectedIndex=0; county.selectedIndex=0; err.textContent=""; college.focus();
  });
  $("backBtn").addEventListener("click",function(){
   results.hidden=true; formArea.hidden=false; $("copyMsg").textContent=""; $("fallbackBox").hidden=true; $("s1").setAttribute("tabindex","-1"); $("s1").focus(); window.scrollTo(0,0);
