@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find Help Near Me</title>
+<style>
+:root{--forest:#013220;--gold:#C6A15B;--warm:#7B7B7B;--ivory:#F8F5E9;--char:#333333;--sage:#A3B18A;--coral:#D97A6A;--sky:#89B6A5;--sage-tint:#E4EADA;--coral-tint:#F7E0DB;--sky-tint:#DCEBE5;--white:#FFFFFF}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{font-size:100%}
+body{margin:0;background:var(--ivory);color:var(--char);font-family:Verdana,"DejaVu Sans",sans-serif;font-size:1.125rem;line-height:1.6}
+.skip{position:absolute;left:-999px;top:0;background:var(--white);color:var(--forest);padding:.6rem 1rem;z-index:10;font-weight:bold}
+.skip:focus{left:12px;top:8px}
+header.band{background:var(--forest);color:var(--ivory);padding:1.5rem 1rem 1.75rem;border-bottom:5px solid var(--gold)}
+.wrap{max-width:52rem;margin:0 auto}
+.kicker{color:var(--gold);font-weight:bold;font-size:1rem;letter-spacing:.04em;margin:0 0 .4rem}
+h1{font-size:1.9rem;line-height:1.25;margin:0 0 .5rem}
+header p{margin:0;font-size:1.125rem}
+main{max-width:52rem;margin:0 auto;padding:1.5rem 1rem 3rem}
+h2{color:var(--forest);font-size:1.5rem;line-height:1.3;margin:0 0 .75rem}
+h3{color:var(--forest);font-size:1.25rem;line-height:1.3;margin:1.5rem 0 .5rem}
+h4{color:var(--forest);font-size:1.125rem;line-height:1.3;margin:1rem 0 .4rem}
+h2:focus{outline:none}
+p{margin:0 0 1rem}
+.card{background:var(--white);border:2px solid var(--sage);border-radius:10px;padding:1.25rem;margin:0 0 1.25rem}
+.note{background:var(--sky-tint);border-left:6px solid var(--forest);padding:.75rem 1rem;border-radius:0 8px 8px 0;margin:0 0 1rem}
+.warn{background:var(--coral-tint);border-left:6px solid var(--coral);padding:.75rem 1rem;border-radius:0 8px 8px 0;margin:0 0 1rem;color:#5a1f14}
+fieldset{border:2px solid var(--warm);border-radius:8px;margin:0 0 1rem;padding:.75rem 1rem 1rem;background:var(--white)}
+legend{font-weight:bold;color:var(--forest);padding:0 .4rem;font-size:1.125rem}
+.opts{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+.opt{display:flex;align-items:center;gap:.5rem;border:2px solid var(--warm);border-radius:8px;padding:.5rem .75rem;min-height:48px;background:var(--white);cursor:pointer;font-size:1rem}
+.opt input{width:1.25rem;height:1.25rem;margin:0;accent-color:var(--forest)}
+.opt:has(input:checked){background:var(--sage-tint);border-color:var(--forest);font-weight:bold}
+label.lbl{display:block;font-weight:bold;color:var(--forest);margin:0 0 .35rem}
+.hint{font-size:1rem;margin:0 0 .5rem;color:#4a4a4a}
+select,textarea{width:100%;font:inherit;font-size:1rem;color:var(--char);background:var(--white);border:2px solid var(--warm);border-radius:8px;padding:.6rem .7rem;min-height:48px}
+textarea{min-height:10rem;resize:vertical}
+button{font:inherit;font-size:1rem;cursor:pointer;min-height:48px;border-radius:8px;padding:.6rem 1.25rem;font-weight:bold}
+.btn{background:var(--forest);color:var(--ivory);border:2px solid var(--forest)}
+.btn:hover{background:#024a2f}
+.btn2{background:var(--white);color:var(--forest);border:2px solid var(--forest)}
+.btn2:hover{background:var(--sage-tint)}
+.row{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1rem}
+:focus-visible{outline:3px solid var(--forest);outline-offset:3px}
+.btn:focus-visible{box-shadow:0 0 0 3px var(--ivory),0 0 0 6px var(--forest)}
+a{color:#0B5A3A}
+ul.links{list-style:none;margin:0 0 1rem;padding:0}
+ul.links li{margin:0 0 .75rem;padding:.6rem .8rem;background:var(--white);border:2px solid var(--sage);border-radius:8px}
+ul.links a{font-weight:bold;overflow-wrap:anywhere}
+ul.links .d{display:block;font-size:1rem;margin-top:.15rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.empty{font-size:1rem;margin:0 0 1rem}
+.topic{border-top:3px solid var(--gold);margin-top:1.5rem;padding-top:.25rem}
+.err{margin:0 0 1rem}
+.err:empty{display:none}
+details{background:var(--white);border:2px solid var(--sage);border-radius:8px;padding:.5rem 1rem;margin:0 0 1.25rem}
+summary{font-weight:bold;color:var(--forest);cursor:pointer;min-height:44px;display:flex;align-items:center}
+code{font-family:"DejaVu Sans Mono",Consolas,monospace;font-size:.95rem;overflow-wrap:anywhere}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--ivory);border:2px solid var(--sage);padding:.75rem;border-radius:8px;font-size:.95rem;font-family:"DejaVu Sans Mono",Consolas,monospace}
+footer{max-width:52rem;margin:0 auto;padding:1rem 1rem 2.5rem;border-top:2px solid var(--sage);font-size:1rem}
+footer p{margin:0 0 .5rem}
+.printonly{display:none}
+@media (max-width:520px){h1{font-size:1.6rem}.opts{flex-direction:column}.opt{width:100%}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media (forced-colors:active){.opt:has(input:checked){outline:3px solid Highlight}}
+@media print{
+ body{background:#fff;color:#000;font-size:12pt}
+ header.band{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 .5rem}
+ .kicker{color:#000}
+ .noprint,.skip,.row{display:none!important}
+ ul.links li{border:1px solid #000;break-inside:avoid}
+ a{color:#000}
+ ul.links a::after{content:" (" attr(href) ")";font-weight:normal;font-size:10pt;overflow-wrap:anywhere}
+ .printonly{display:block}
+ .topic{break-inside:auto}
+ h3,h4{break-after:avoid}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="band">
+ <div class="wrap">
+  <p class="kicker">Student tool</p>
+  <h1>Find Help Near Me</h1>
+  <p>Choose your county and the kinds of help you want. You will get links to your college, your county, and California.</p>
+ </div>
+</header>
+<noscript><div class="warn" style="max-width:52rem;margin:1rem auto;padding:1rem"><p>This tool needs JavaScript. Please turn it on, or ask your college for a printed list of help.</p></div></noscript>
+<main id="main">
+ <div id="formArea" class="noprint">
+  <div class="note"><p><strong>Before you start:</strong> This tool does not apply for anything, does not save anything, and cannot tell you whether you qualify for any program. It points you to official websites so you can ask. Asking for help is a good first step.</p></div>
+  <details id="staffInfo">
+   <summary>For college staff: add your college’s information</summary>
+   <p>Each college can add its own offices, programs, and websites so students see them first. Open this file in a text editor and find the block that starts with <code>const COLLEGE</code>. Fill in the name, the date you updated it, and (if you like) a county to choose automatically. Under <code>topics</code>, add items for each kind of help.</p>
+   <p>List offices and programs, not the names of people, because staff change. Use website links that start with <code>https://</code>. Leave a topic empty if your college does not offer that help.</p>
+   <pre>topics: {
+  food: [
+    { label: "Basic needs center",
+      url: "https://www.example.edu/basic-needs",
+      note: "Student Services Building, Room 100" }
+  ]
+}</pre>
+   <p>Topic names you can use: calfresh, food, internet, housing, health, mental, childcare, transport, legal, immigration, veterans, foster, jobs, money.</p>
+  </details>
+  <form id="form" novalidate>
+   <h2 id="s1">Step 1: Choose your county</h2>
+   <label class="lbl" for="county">County where you live or need help</label>
+   <p class="hint" id="countyHint">If you are not sure, choose the last choice. You will still get links that work anywhere in California.</p>
+   <select id="county" aria-describedby="countyHint"></select>
+   <h2 id="s2" style="margin-top:1.5rem">Step 2: Choose the help you want</h2>
+   <fieldset id="topicSet"><legend>Choose all that apply</legend><div class="opts" id="topicOpts"></div></fieldset>
+   <div id="err" class="err" role="alert"></div>
+   <div class="row"><button type="submit" class="btn" id="goBtn">Show my links</button><button type="button" class="btn2" id="clearBtn">Clear my choices</button></div>
+  </form>
+ </div>
+
+ <section id="results" hidden aria-labelledby="resTitle">
+  <h2 id="resTitle" tabindex="-1">Your links</h2>
+  <p id="resSummary"></p>
+  <div class="row noprint" style="margin-top:0;margin-bottom:1rem">
+   <button type="button" class="btn" id="copyBtn">Copy my links</button>
+   <button type="button" class="btn2" id="printBtn">Print my links</button>
+   <button type="button" class="btn2" id="backBtn">Change my choices</button>
+  </div>
+  <p id="copyMsg" role="status" class="hint noprint"></p>
+  <div id="fallbackBox" hidden class="noprint"><p class="hint">Your browser did not let this page copy for you. Select the text below and copy it.</p><label class="lbl" for="fallback">Links to copy</label><textarea id="fallback" readonly></textarea></div>
+  <div id="resBody"></div>
+  <div class="note"><p><strong>About these links:</strong> The links on this page were checked on <span id="checked"></span>. Websites change. If a link does not work, search for the name of the agency or ask your college. A link does not mean you will get a service. Each program decides who it can help.</p></div>
+  <p class="noprint hint">You can also print this page with Ctrl+P (Windows) or Cmd+P (Mac).</p>
+ </section>
+</main>
+<footer>
+ <p>Developed by Educational Management Resources Group (EMRG).</p>
+</footer>
+
+<script id="college-config">
+// COLLEGE STAFF: fill in this block. List offices and programs, not people.
+const COLLEGE = {
+  name: "",     // Example: "Example College"
+  updated: "",  // Example: "October 2026"
+  county: "",   // Optional. One of: alameda, kern, losangeles, orange, sacramento, eldorado, sanbernardino
+  topics: {
+    // food: [ { label: "Basic needs center", url: "https://www.example.edu/basic-needs", note: "Student Services Building, Room 100" } ],
+  }
+};
+</script>
+<script>
+// Verified-link data. Each link: [text, url, description]. Checked October 7, 2026.
+const L = (t,u,d)=>({t,u,d});
+const TOPICS = [
+ {id:"calfresh",label:"Help applying for CalFresh",college:"Ask the student services front desk whether your college has staff or a program that can help with CalFresh applications.",note:"Your county office decides who gets CalFresh. This tool cannot tell you whether you qualify."},
+ {id:"food",label:"Food",college:"Ask whether your college has a food pantry or basic needs center."},
+ {id:"internet",label:"Internet, phone, and computers",college:"Ask the library or help desk whether your college lends laptops or hotspots."},
+ {id:"housing",label:"Housing and emergency help",college:"Ask student services or the basic needs center about emergency housing help."},
+ {id:"health",label:"Health care and coverage",college:"Ask whether your college has a health center."},
+ {id:"mental",label:"Mental health and crisis support",college:"Ask whether your college has counseling services.",safety:"If you or someone you know is in crisis or danger: Call 988, the national mental health hotline, or call 911 in an emergency."},
+ {id:"childcare",label:"Child care",college:"Ask whether your college has a child care center or a program for student parents."},
+ {id:"transport",label:"Transportation",college:"Ask your coach or support team what help with transportation your college offers."},
+ {id:"legal",label:"Free legal help",college:"Ask student services whether your college offers free legal help or can refer you."},
+ {id:"immigration",label:"Immigration legal help",college:"Ask student services whether your college offers free immigration legal help or can refer you.",note:"This tool does not ask about anyone’s status and does not save anything. The California Attorney General says only lawyers, accredited representatives, and recognized organizations can give immigration legal advice. Notarios and notary publics cannot."},
+ {id:"veterans",label:"Veterans services",college:"Ask for your college’s veterans services office."},
+ {id:"foster",label:"Foster youth and kinship care",college:"Ask for your college’s foster youth or kinship care program."},
+ {id:"jobs",label:"Jobs and career help",college:"Ask for your college’s career center or job placement office."},
+ {id:"money",label:"Money for school, bills, and taxes",college:"Ask your coach or support team which supportive services and emergency aid your college offers, and whether there are limits."}
+];
+const STATE = {
+ calfresh:[
+  L("BenefitsCal: apply for CalFresh online","https://benefitscal.com/","The California website for applying online for CalFresh, Medi-Cal, and CalWORKs. The state’s Find benefits online page links to it."),
+  L("GetCalFresh: free help by chat, text, or email","https://www.getcalfresh.org/en/","Run by Code for America, a nonprofit. You cannot apply on this site. It sends you to BenefitsCal."),
+  L("CalFresh, from the California Department of Social Services","https://www.cdss.ca.gov/calfresh","The state’s main CalFresh page. It lists ways to apply online, by phone, or in person."),
+  L("State CalFresh help and contacts","https://cdss.ca.gov/inforesources/calfresh/contacts","Run by the California Department of Social Services. Shows the state CalFresh helpline and email, and links to county offices."),
+  L("Find your county social services office","https://cdss.ca.gov/County-Offices","A list of county social services offices for all 58 counties, with links to county websites.")],
+ food:[
+  L("Find a food bank near you","https://www.feedingamerica.org/find-your-local-foodbank","Run by Feeding America, a national nonprofit. Search by ZIP code or state."),
+  L("California Food Banks: find food","https://www.cafoodbanks.org/find-food/","Run by California Food Banks, a nonprofit network. Shows how to contact a local food bank and how to apply for CalFresh."),
+  L("WIC in California","https://www.myfamily.wic.ca.gov/","Run by the California Department of Public Health. Learn about WIC and find an office."),
+  L("California Community Colleges Health and Wellness","https://www.cccstudentmentalhealth.org/","Run by the California Community Colleges Chancellor’s Office. Has a topic for basic needs support.")],
+ internet:[
+  L("Lifeline: help paying for phone or internet","https://www.lifelinesupport.org","Run by the Universal Service Administrative Company under the FCC. Shows how to apply and sign up with a participating company."),
+  L("California LifeLine","https://www.cpuc.ca.gov/consumer-support/financial-assistance-savings-and-discounts/lifeline","Run by the California Public Utilities Commission. Discounts on phone service, with steps to get started."),
+  L("The Affordable Connectivity Program has ended","https://www.fcc.gov/affordable-connectivity-program-consumer-faq","An FCC page saying this program ended on June 1, 2024. You may still see old information about it.")],
+ housing:[
+  L("211 California: find local help","https://211ca.org/","Run by United Ways of California. Search for housing, food, utility, and money help, and find your local 211."),
+  L("Find a housing counselor","https://www.consumerfinance.gov/find-a-housing-counselor/","Run by the Consumer Financial Protection Bureau, using HUD’s official list. Search by ZIP code for help with renting and other housing problems.")],
+ health:[
+  L("Medi-Cal: ways to apply","https://www.dhcs.ca.gov/medi-cal/apply/","Run by the California Department of Health Care Services. Lists four ways to apply: online, by mail, by phone, or in person."),
+  L("Covered California: free local enrollment help","https://www.coveredca.com/get-help/local/","Run by Covered California, the state’s health insurance marketplace. Free in-person help from a certified enroller."),
+  L("Covered California: what it is","https://www.coveredca.com/about/","Explains what Covered California is and how to apply.")],
+ mental:[
+  L("988 Suicide and Crisis Lifeline","https://988lifeline.org","Free, confidential support by call, text, or chat, 24 hours a day."),
+  L("California Community Colleges Health and Wellness","https://www.cccstudentmentalhealth.org/","Run by the California Community Colleges Chancellor’s Office. Resources on mental health, health services, coping skills, and crisis services.")],
+ childcare:[
+  L("California Child Care Resource and Referral Network","https://rrnetwork.org/","Look up your local child care referral agency by ZIP code. The Network is a group of state-funded local agencies."),
+  L("My Child Care Plan","https://mychildcareplan.org/","A short questionnaire that suggests child care options and links to the local agency directory."),
+  L("State list of child care referral agencies","https://www.cde.ca.gov/sp/cd/re/rragencylist.asp","Run by the California Department of Education. Explains referral services. Last reviewed June 16, 2026."),
+  L("State child care payment programs","https://www.cdss.ca.gov/inforesources/calworks-child-care/subsidized-programs","Run by the California Department of Social Services. An overview of the state’s subsidized child care programs.")],
+ transport:[],
+ legal:[
+  L("LawHelpCA","https://www.lawhelpca.org/","Maintained by the Legal Aid Association of California, a nonprofit. Self-help legal articles and a search for local legal aid."),
+  L("State Bar of California: free legal help","https://www.calbar.ca.gov/Public/Need-Legal-Help/Free-Legal-Help","Information on legal aid funded by the State Bar for people with low and moderate incomes.")],
+ immigration:[
+  L("California free immigration legal services","https://www.cdss.ca.gov/inforesources/immigration","Run by the California Department of Social Services. Says the state funds nonprofits to provide free immigration legal services, and links to a list of providers."),
+  L("State Bar of California: find help with immigration","https://www.calbar.ca.gov/public/recursos-en-espanol/buscando-ayuda-con-asuntos-de-inmigracion","Explains how to find a trustworthy lawyer or immigration consultant and how to check a license. The page is in English."),
+  L("Attorney General: free or low-cost immigration help and avoiding scams","https://www.oag.ca.gov/news/press-releases/attorney-general-bonta-california%E2%80%99s-immigrant-communities-free-or-low-cost","A California Department of Justice news release from September 11, 2025, with links to LawHelpCA and lists of free legal providers.")],
+ veterans:[
+  L("California Department of Veterans Affairs","https://www.calvet.ca.gov/","The state’s veterans department. Has links to education benefits and to county veteran service offices."),
+  L("U.S. Department of Veterans Affairs: education benefits","https://www.va.gov/education/","GI Bill and other education benefits, with ways to apply and get help. Last updated September 2, 2026."),
+  L("California Community Colleges: veterans services","https://www.cccco.edu/about-us/chancellors-office/divisions/educational-services-and-support/student-service/what-we-do/veterans-education-and-transition-services/","Covers Veterans Resource Centers at colleges and the CalVet Fee Waiver for Veteran Dependents. Last modified September 1, 2026.")],
+ foster:[
+  L("NextUp: support for current and former foster youth","https://icangotocollege.com/financial-aid/foster-youth-support","Run by the California Community Colleges Chancellor’s Office. Describes NextUp, which gives financial support and resources at a community college."),
+  L("Chafee Grant","https://www.csac.ca.gov/chafee","Run by the California Student Aid Commission. What the grant is, how to apply, and a list of common questions."),
+  L("Kin-GAP and kinship care","https://www.cdss.ca.gov/inforesources/foster-care/kinship-guardianship-assistance","Run by the California Department of Social Services. Describes a program for children placed long-term with relatives.")],
+ jobs:[
+  L("California jobs and training services","https://edd.ca.gov/en/jobs_and_training/","Run by the Employment Development Department. Free job and training services, with a link to find an America’s Job Center."),
+  L("America’s Job Center of California","https://edd.ca.gov/ajcc","Explains what the job center network is and how to find a location.")],
+ money:[
+  L("FAFSA: steps to fill out the form","https://studentaid.gov/articles/fafsa-student-steps/","Run by Federal Student Aid, U.S. Department of Education. Published September 2026."),
+  L("Cal Grant","https://www.csac.ca.gov/cal-grant","Run by the California Student Aid Commission. Explains how to apply and the deadlines. Check the deadlines each year."),
+  L("California Dream Act Application","https://csac.ca.gov/cadaa-and-eligibility","Run by the California Student Aid Commission. Explains what the application is and how it differs from the FAFSA."),
+  L("California College Promise Grant","https://icangotocollege.com/financial-aid/california-college-promise-grant","Run by the California Community Colleges. Explains the grant and points to the FAFSA or Dream Act application."),
+  L("IRS: find free tax help","https://www.irs.gov/individuals/find-a-location-for-free-tax-prep","Find a free tax preparation site. Page dated March 11, 2026."),
+  L("California Franchise Tax Board: free tax help","https://www.ftb.ca.gov/help/free-tax-help/index.html","Information on free tax help programs. Last updated February 26, 2026.")]
+};
+const C = (id,name,t)=>({id,name,t});
+const COUNTIES = [
+ C("alameda","Alameda County",{
+  calfresh:[L("CalFresh, Alameda County Social Services Agency","https://socialservices.alamedacountyca.gov/our-services/Health-and-Food/CalFresh/index","The county’s CalFresh page, with remote options, the BenefitsCal link, forms, and offices."),
+            L("Alameda County Social Services offices","https://socialservices.alamedacountyca.gov/contact-us/Our-Offices","Addresses of the county’s offices.")],
+  food:[L("211 Alameda County","https://211alamedacounty.org/","A nonprofit that runs the county’s 211 referral service. Search by need.")],
+  housing:[L("211 Alameda County","https://211alamedacounty.org/","A nonprofit that runs the county’s 211 referral service. Search by need.")],
+  money:[L("211 Alameda County","https://211alamedacounty.org/","A nonprofit that runs the county’s 211 referral service. Search by need.")],
+  transport:[L("AC Transit discounts","https://www.actransit.org/discounts","Youth fares and Clipper START, a low-income fare. No college student pass is listed."),
+             L("BART discounts","https://www.bart.gov/discounts","Lists discounts, including Clipper START, which you set up through Clipper.")],
+  veterans:[L("Alameda County Veterans Service Office","https://socialservices.alamedacountyca.gov/our-services/Veterans/index","Help with VA and CalVet claims.")],
+  childcare:[L("4Cs of Alameda County","https://4calameda.org/","A nonprofit child care referral agency. The page says the referral service is free for any family."),
+             L("State list of Alameda County referral agencies","https://www.cde.ca.gov/sp/cd/re/alamedarr.asp","Run by the California Department of Education. Names three agencies for the county.")],
+  immigration:[L("Alameda County immigrant relations","https://socialservices.alamedacountyca.gov/about-us/Government-and-Community-Relations/programs-and-initiatives/immigrant-relations","A list of nonprofit immigration legal providers, a resource guide, and Know Your Rights cards.")]}),
+ C("kern","Kern County",{
+  calfresh:[L("CalFresh, Kern County Department of Human Services","https://www.kcdhs.org/services/apply-for-benefits/calfresh","Describes CalFresh and ways to apply. This page does not list offices.")],
+  food:[L("211 Kern County","https://www.capk.org/211kerncounty/","Run by Community Action Partnership of Kern, which the page says is the 211 provider for the county.")],
+  housing:[L("211 Kern County","https://www.capk.org/211kerncounty/","Run by Community Action Partnership of Kern, which the page says is the 211 provider for the county.")],
+  money:[L("211 Kern County","https://www.capk.org/211kerncounty/","Run by Community Action Partnership of Kern, which the page says is the 211 provider for the county.")],
+  transport:[L("Golden Empire Transit: free bus rides for students","https://www.getbus.org/studentrides/","The page says the student pass program covers K-12 through college, including Bakersfield College. Show your school ID to board."),
+             L("Golden Empire Transit: fares and passes","https://www.getbus.org/fares-and-passes/","Regular and reduced fares and passes.")],
+  legal:[L("Kern Superior Court Self-Help Center","https://www.kern.courts.ca.gov/self-help/self-help-center","Run by the state court, not the county. Help with forms for family law, guardianship, and small claims. No legal advice.")],
+  veterans:[L("Kern County Veterans Service","https://www.kerncounty.com/government/veterans-service","Benefits, ID cards, and office information.")]}),
+ C("losangeles","Los Angeles County",{
+  calfresh:[L("CalFresh, LA County Department of Public Social Services","https://dpss.lacounty.gov/en/food/calfresh.html","How to apply online, by phone, by mail or fax, or in person at a district office.")],
+  food:[L("211 LA","https://211la.org/","A nonprofit. Search for services by location or topic.")],
+  housing:[L("211 LA","https://211la.org/","A nonprofit. Search for services by location or topic.")],
+  money:[L("211 LA","https://211la.org/","A nonprofit. Search for services by location or topic.")],
+  internet:[L("LA County Library: public computers","https://lacountylibrary.org/public-computers/","Public computers at libraries with a library card and PIN. The page says up to 2 hours per day."),
+            L("LA County Library: Laptop Express","https://lacountylibrary.org/laptop-express/","Borrow a Chromebook to use inside the library with an adult library card, at the locations listed.")],
+  transport:[L("LA Metro: GoPass","https://www.metro.net/fares/gopass/","The page says community college students at participating schools ride free. Ask whether your college takes part."),
+             L("LA Metro: LIFE low-income fare program","https://www.metro.net/fares/life/","A fare assistance program, with how to apply."),
+             L("LA Metro: fares overview","https://www.metro.net/riding/fares/","Lists GoPass, College U-Pass, and LIFE.")],
+  veterans:[L("LA County Military and Veterans Affairs","https://mva.lacounty.gov/","The county department for veterans. Has appointment and contact options.")],
+  childcare:[L("State list of LA County referral agencies","https://www.cde.ca.gov/Sp/cd/re/larr.asp","Run by the California Department of Education. Lists eight child care referral agencies in the county. Reviewed January 23, 2026.")],
+  immigration:[L("LA County Office of Immigrant Affairs","https://oia.lacounty.gov/immigration-information/","Explains who can give immigration legal advice and points to ways to find legal help. Last modified April 4, 2026.")]}),
+ C("orange","Orange County",{
+  calfresh:[L("CalFresh, Orange County Social Services Agency","https://ssa.ocgov.com/cash-calfresh/calfresh","Ways to apply, forms, and links to offices."),
+            L("Orange County Social Services office list","https://ssa.ocgov.com/about-us/office-locations/office-location-list","Offices grouped by program, including CalFresh and Medi-Cal.")],
+  food:[L("211 Orange County","https://211oc.org/","Run by Orange County United Way. Search online for resources.")],
+  housing:[L("211 Orange County","https://211oc.org/","Run by Orange County United Way. Search online for resources.")],
+  money:[L("211 Orange County","https://211oc.org/","Run by Orange County United Way. Search online for resources.")],
+  internet:[L("OC Public Libraries: Internet Access Initiative","https://libraries.oc.gov/iai","Borrow Chromebooks and Wi-Fi hotspots with a library card. Ask the library what is available now.")],
+  transport:[L("OCTA: Community College Pass","https://octa.net/getting-around/bus/oc-bus/fares-and-passes/overview/community-college-pass/","The page says students at all nine Orange County community colleges ride OC Bus free after registering, and must reapply each semester."),
+             L("OCTA: College Fares","https://octa.net/getting-around/bus/oc-bus/fares-and-passes/overview/college-fares/","A reduced monthly pass for students taking 9 or more credits."),
+             L("OCTA: fares overview","https://octa.net/fares","Lists the college student fare, the Community College Program, and other discounts.")],
+  veterans:[L("Orange County Veterans Service Office","https://veterans.oc.gov/about-us","What the office does, its address and hours, and how to book an appointment.")],
+  childcare:[L("Children’s Home Society: find a child care provider","https://chs-ca.org/programs-services/find-a-child-care-provider/","A nonprofit. Online referral search for Orange County. The page says referral services are free.")],
+  immigration:[L("Orange County Office of Immigrant and Refugee Affairs","https://ssa.ocgov.com/OIRA","A resource guide in seven languages and a list of immigration legal service providers.")]}),
+ C("sacramento","Sacramento County",{
+  calfresh:[L("CalFresh, Sacramento County Department of Human Assistance","https://ha.saccounty.gov/benefits/CalFresh/Pages/default.aspx","How to apply, plus six in-person offices with addresses and hours.")],
+  transport:[L("SacRT: student passes","https://www.sacrt.com/student-passes/","Describes the Los Rios Universal Transit Pass for college students. The page says you need the app to activate the Los Rios pass.")],
+  veterans:[L("Sacramento County Veterans Services","https://ha.saccounty.gov/benefits/VeteransServices","Helps veterans and dependents with VA and other benefit claims.")],
+  childcare:[L("Child Action: find a provider","https://childaction.org/find-a-provider/","A child care referral agency. The page says the service is free for Sacramento County families.")],
+  _no211:true}),
+ C("eldorado","El Dorado County",{
+  calfresh:[L("CalFresh, El Dorado County Human Services","https://www.eldoradocounty.ca.gov/Health-Well-Being/Human-Services/Food-Assistance/CalFresh","How to apply, plus the Placerville and South Lake Tahoe offices.")],
+  transport:[L("El Dorado Transit: Los Rios students ride free","https://eldoradotransit.com/news/sac-state-los-rios-students-ride-free/","The page says Los Rios students ride free with the Los Rios Student ZipPass. The page has no date, so check with your college.")],
+  veterans:[L("El Dorado County Veteran Services","https://www.eldoradocounty.ca.gov/Services/Assistance-Programs/Veteran-Services","A county department that helps veterans, dependents, and survivors get benefits.")],
+  childcare:[L("Catalyst Community: families","https://www.catalystcomm.org/families/","The state lists Catalyst Community as the child care referral agency for El Dorado County.")],
+  legal:[L("El Dorado Superior Court Self-Help Center","https://www.eldorado.courts.ca.gov/self-help","Run by the state court, not the county. Workshops, online forms, and advisors for family law and small claims.")],
+  internet:[L("El Dorado County Library","https://eldoradolibrary.org/about-the-library/","The page says all locations have free Wi-Fi and public computers.")],
+  _no211:true}),
+ C("sanbernardino","San Bernardino County",{
+  calfresh:[L("CalFresh, San Bernardino County Transitional Assistance Department","https://wp.sbcounty.gov/tad/programs/calfresh/","How to apply online through BenefitsCal, in person, by mail, fax, or phone."),
+            L("Find a Transitional Assistance office","https://wp.sbcounty.gov/tad/find-an-office/","An office search. The list may not show for every browser.")],
+  food:[L("Inland SoCal 211","https://inlandsocaluw.org/211","Run by Inland Southern California United Way. It covers both Riverside and San Bernardino counties.")],
+  housing:[L("Inland SoCal 211","https://inlandsocaluw.org/211","Run by Inland Southern California United Way. It covers both Riverside and San Bernardino counties.")],
+  money:[L("Inland SoCal 211","https://inlandsocaluw.org/211","Run by Inland Southern California United Way. It covers both Riverside and San Bernardino counties.")],
+  internet:[L("San Bernardino County Library: services with a library card","https://main.sbcounty.gov/2026/08/13/explore-san-bernardino-county-services-discover-more-with-a-library-card/","The page says cardholders can use free Wi-Fi and public computers. Dated August 13, 2026."),
+            L("San Bernardino County Library: locations and hours","https://library.sbcounty.gov/library-locations/","Find a branch. The page says branches offer free computer access with internet.")],
+  transport:[L("Victor Valley Transit Authority: students","https://vvta.org/for-students","Explains the Victor Valley College ID decal and the VVTA Student Photo ID."),
+             L("Victor Valley Transit Authority: fares","https://vvta.org/fares","Fare categories, including student fares."),
+             L("Omnitrans: fares","https://omnitrans.org/buy-a-pass/fares/","Lists fares and reduced fares. K-12 students ride free with a student ID.")],
+  legal:[L("San Bernardino Superior Court self-help and community resources","https://sanbernardino.courts.ca.gov/self-help-community-resources","Run by the state court, not the county. Lists legal aid organizations and a lawyer referral service.")],
+  veterans:[L("San Bernardino County Department of Veterans Affairs","https://va.sbcounty.gov/about-us/","Helps veterans and families get benefits. Has a link to the College Fee Waiver.")],
+  childcare:[L("Child Care Resource Center: finding child care","https://www.ccrcca.org/parents/finding-child-care/","A nonprofit that the state lists as a child care referral agency with a San Bernardino office.")]})
+];
+
+(function(){
+ var CHECKED = "October 7, 2026";
+ function el(tag, attrs){
+  var n = document.createElement(tag), i, kids = Array.prototype.slice.call(arguments, 2);
+  if(attrs){ for(var k in attrs){ if(k === "text"){ n.textContent = attrs[k]; } else { n.setAttribute(k, attrs[k]); } } }
+  (function add(list){ for(i=0;i<list.length;i++){ var c=list[i]; if(c==null) continue; if(Array.isArray(c)){ add(c); } else if(typeof c === "string"){ n.appendChild(document.createTextNode(c)); } else { n.appendChild(c); } } })(kids);
+  return n;
+ }
+ var $ = function(id){ return document.getElementById(id); };
+ var form=$("form"), county=$("county"), topicOpts=$("topicOpts"), err=$("err"), results=$("results"), formArea=$("formArea");
+ $("checked").textContent = CHECKED;
+
+ // County choices
+ var sorted = COUNTIES.slice().sort(function(a,b){ return a.name < b.name ? -1 : 1; });
+ county.appendChild(el("option",{value:"",text:"Choose a county"}));
+ sorted.forEach(function(c){ county.appendChild(el("option",{value:c.id,text:c.name})); });
+ county.appendChild(el("option",{value:"other",text:"Not sure, or a county not listed"}));
+ if(COLLEGE.county){ for(var q=0;q<county.options.length;q++){ if(county.options[q].value===COLLEGE.county){ county.selectedIndex=q; } } }
+
+ // Topic checkboxes
+ TOPICS.forEach(function(t){
+  var id="t_"+t.id;
+  topicOpts.appendChild(el("label",{"class":"opt","for":id}, el("input",{type:"checkbox",id:id,value:t.id,name:"topic"}), t.label));
+ });
+
+ function selectedTopics(){ return TOPICS.filter(function(t){ return $("t_"+t.id).checked; }); }
+ function safeUrl(u){ return typeof u==="string" && /^https:\/\//i.test(u); }
+ function countyById(id){ for(var i=0;i<COUNTIES.length;i++){ if(COUNTIES[i].id===id) return COUNTIES[i]; } return null; }
+
+ function linkItem(l){
+  return el("li",null,
+   el("a",{href:l.u,target:"_blank",rel:"noopener noreferrer"}, l.t, el("span",{"class":"sr",text:" (opens in a new tab)"})),
+   el("span",{"class":"d",text:l.d}));
+ }
+ function collegeItem(it){
+  var kids=[];
+  if(safeUrl(it.url)){ kids.push(el("a",{href:it.url,target:"_blank",rel:"noopener noreferrer"}, it.label||it.url, el("span",{"class":"sr",text:" (opens in a new tab)"}))); }
+  else { kids.push(el("strong",{text:it.label||""})); }
+  if(it.note){ kids.push(el("span",{"class":"d",text:it.note})); }
+  return el("li",null,kids);
+ }
+ function countyLinks(c, topicId){
+  if(!c) return [];
+  var out = (c.t[topicId]||[]).slice();
+  return out;
+ }
+
+ var lastText = "";
+ function build(){
+  var body=$("resBody"); body.textContent="";
+  var topics=selectedTopics(), cid=county.value, c=(cid&&cid!=="other")?countyById(cid):null;
+  var cname = c ? c.name : "Not sure or not listed";
+  $("resSummary").textContent = "County: " + cname + ". Help you chose: " + topics.map(function(t){return t.label;}).join(", ") + ".";
+  var text=["Find Help Near Me","County: "+cname,"Links checked "+CHECKED,""];
+  if(!c){ body.appendChild(el("div",{"class":"note"},el("p",{text:"Your county is not listed yet, so you will see links that work anywhere in California. 211 can point you to local help. Your county’s social services office is listed in the CalFresh links."}))); }
+  topics.forEach(function(t){
+   var sec=el("section",{"class":"topic","aria-labelledby":"h_"+t.id});
+   sec.appendChild(el("h3",{id:"h_"+t.id,text:t.label}));
+   text.push(t.label.toUpperCase());
+   if(t.safety){ sec.appendChild(el("div",{"class":"warn",role:"note"},el("p",{text:t.safety}))); text.push(t.safety); }
+   if(t.note){ sec.appendChild(el("div",{"class":"note",role:"note"},el("p",{text:t.note}))); text.push(t.note); }
+   // College
+   var cItems=(COLLEGE.topics&&COLLEGE.topics[t.id])||[];
+   sec.appendChild(el("h4",{text:COLLEGE.name?("At "+COLLEGE.name):"At my college"}));
+   text.push("At "+(COLLEGE.name||"my college")+":");
+   if(cItems.length){
+    sec.appendChild(el("ul",{"class":"links"},cItems.map(collegeItem)));
+    cItems.forEach(function(it){ text.push("- "+(it.label||"")+(safeUrl(it.url)?" "+it.url:"")+(it.note?" ("+it.note+")":"")); });
+    if(COLLEGE.updated){ sec.appendChild(el("p",{"class":"empty",text:"College information updated "+COLLEGE.updated+"."})); }
+   } else {
+    sec.appendChild(el("p",{"class":"empty",text:(COLLEGE.name?COLLEGE.name+" has not added this yet. ":"Your college has not added this yet. ")+t.college}));
+    text.push("- "+t.college);
+   }
+   // County
+   var cl=countyLinks(c,t.id);
+   var cn=c?c.name:null;
+   if(c){
+    sec.appendChild(el("h4",{text:"In "+cn}));
+    text.push("In "+cn+":");
+    if(cl.length){ sec.appendChild(el("ul",{"class":"links"},cl.map(linkItem))); cl.forEach(function(l){ text.push("- "+l.t+" "+l.u); }); }
+    else {
+     var msg="No county links are listed for this topic yet. Try the California links below.";
+     if(c.t._no211 && (t.id==="food"||t.id==="housing"||t.id==="money")){ msg="No county 211 link is listed yet. Use 211 California below to find your local 211."; }
+     sec.appendChild(el("p",{"class":"empty",text:msg})); text.push("- "+msg);
+    }
+   }
+   // State
+   var sl=STATE[t.id]||[];
+   if(sl.length){
+    sec.appendChild(el("h4",{text:"Across California"}));
+    sec.appendChild(el("ul",{"class":"links"},sl.map(linkItem)));
+    text.push("Across California:"); sl.forEach(function(l){ text.push("- "+l.t+" "+l.u); });
+   } else if(t.id==="transport"){
+    sec.appendChild(el("p",{"class":"empty",text:"Transit passes and fares are set by each local transit agency, so there are no California-wide links for this topic. If your local agency is not listed, search the agency’s website for student or reduced fares, or ask your college."}));
+   }
+   body.appendChild(sec); text.push("");
+  });
+  text.push("This tool does not apply for anything and cannot tell you whether you qualify. Websites change. Ask your college if a link does not work.");
+  lastText=text.join("\n");
+ }
+
+ form.addEventListener("submit",function(e){
+  e.preventDefault(); err.textContent="";
+  var msgs=[];
+  if(!county.value){ msgs.push("Choose a county in Step 1. If you are not sure, choose the last choice."); }
+  if(!selectedTopics().length){ msgs.push("Choose at least one kind of help in Step 2."); }
+  if(msgs.length){
+   err.appendChild(el("div",{"class":"warn"}, msgs.map(function(m){ return el("p",{text:m,style:"margin:0 0 .25rem"}); })));
+   if(!county.value){ county.focus(); } else { $("t_"+TOPICS[0].id).focus(); }
+   return;
+  }
+  build(); formArea.hidden=true; results.hidden=false; $("resTitle").focus(); window.scrollTo(0,0);
+ });
+ $("clearBtn").addEventListener("click",function(){
+  TOPICS.forEach(function(t){ $("t_"+t.id).checked=false; }); county.selectedIndex=0; err.textContent=""; county.focus();
+ });
+ $("backBtn").addEventListener("click",function(){
+  results.hidden=true; formArea.hidden=false; $("copyMsg").textContent=""; $("fallbackBox").hidden=true; $("s1").setAttribute("tabindex","-1"); $("s1").focus(); window.scrollTo(0,0);
+ });
+ $("printBtn").addEventListener("click",function(){ try{ window.print(); }catch(x){ $("copyMsg").textContent="Printing is not available here. Use Ctrl+P or Cmd+P."; } });
+ function fallback(){ $("fallbackBox").hidden=false; $("fallback").value=lastText; $("fallback").focus(); $("fallback").select(); $("copyMsg").textContent="Copy the text in the box below."; }
+ $("copyBtn").addEventListener("click",function(){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+   navigator.clipboard.writeText(lastText).then(function(){ $("fallbackBox").hidden=true; $("copyMsg").textContent="Your links were copied."; },fallback);
+  } else { fallback(); }
+ });
+})();
+</script>
+</body>
+</html>
