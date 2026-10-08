@@ -108,19 +108,19 @@ footer p{margin:0 0 .5rem}
  </div>
 
  <section id="results" hidden aria-labelledby="resTitle">
-  <h2 id="resTitle" tabindex="-1">Your links</h2>
+  <h2 id="resTitle" tabindex="-1">Your results</h2>
   <p id="resSummary"></p>
   <div class="row noprint" style="margin-top:0;margin-bottom:1rem">
-   <button type="button" class="btn" id="copyBtn">Copy my links</button>
-   <button type="button" class="btn2" id="saveBtn">Save my links with clickable links</button>
-   <button type="button" class="btn2" id="printBtn">Print my links</button>
+   <button type="button" class="btn" id="copyBtn">Copy my results</button>
+   <button type="button" class="btn2" id="saveBtn">Save my results with clickable links</button>
+   <button type="button" class="btn2" id="printBtn">Print my results</button>
    <button type="button" class="btn2" id="backBtn">Change my choices</button>
   </div>
   <p id="copyMsg" role="status" class="hint noprint"></p>
   <div id="fallbackBox" hidden class="noprint"><p class="hint">Your browser did not let this page copy for you. Select the text below and copy it.</p><label class="lbl" for="fallback">Links to copy</label><textarea id="fallback" readonly></textarea></div>
   <div id="resBody"></div>
   <div class="note"><p><strong>About these links:</strong> The links on this page were checked on <span id="checked"></span>. Websites change. If a link does not work, search for the name of the agency or ask your college. A link does not mean you will get a service. Each program decides who it can help.</p></div>
-  <p class="noprint hint">A printed page cannot be clicked. To keep links you can click, choose “Save my links with clickable links.” It saves a small web page to your device. Open it any time and tap or click a link to go to the website. You can also print this page with Ctrl+P (Windows) or Cmd+P (Mac).</p>
+  <p class="noprint hint">If you print your results, the URLs are not clickable. To keep your results links, choose “Save my results with clickable links” at the top of this page. It saves a small web page to your device. Open it any time and tap or click a link to go to the website. You can also print this page with Ctrl+P (Windows) or Cmd+P (Mac).</p>
  </section>
 </main>
 <footer>
@@ -1065,20 +1065,20 @@ COUNTIES.forEach(c=>{ delete c.t._no211; });
   Array.prototype.forEach.call(clone.querySelectorAll("[id]"),function(n){ n.removeAttribute("id"); });
   Array.prototype.forEach.call(clone.querySelectorAll("[aria-labelledby]"),function(n){ n.removeAttribute("aria-labelledby"); });
   var css="body{margin:0;background:#F8F5E9;color:#333;font-family:Verdana,'DejaVu Sans',sans-serif;font-size:1.125rem;line-height:1.6}header{background:#013220;color:#F8F5E9;padding:1.25rem 1rem;border-bottom:5px solid #C6A15B}header h1{margin:0;font-size:1.6rem;line-height:1.3}main{max-width:52rem;margin:0 auto;padding:1rem}h2,h3{color:#013220;font-size:1.25rem;margin:1.5rem 0 .5rem}h4{color:#013220;font-size:1.125rem;margin:1rem 0 .4rem}a{color:#013220;font-weight:bold;text-decoration:underline}a:focus{outline:3px solid #C6A15B;outline-offset:2px}ul{list-style:none;padding:0;margin:0}li{background:#fff;border:2px solid #A3B18A;border-radius:8px;padding:.6rem .8rem;margin:0 0 .6rem}.d{display:block;font-size:1rem}.sr{position:absolute;left:-9999px}.note{background:#DCEBE5;border-left:6px solid #013220;padding:.75rem 1rem;margin:0 0 1rem}.warn{background:#F7E0DB;border-left:6px solid #D97A6A;padding:.75rem 1rem;margin:0 0 1rem;color:#5a1f14}.empty{font-size:1rem}footer{max-width:52rem;margin:0 auto;padding:1rem;font-size:1rem}";
-  var title="My links"+(col?" - "+col.name:"");
-  var doc="<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>"+esc(title)+"</title><style>"+css+"</style></head><body><header><h1>"+esc(title)+"</h1></header><main><h2>Your links</h2><p>"+esc((col?"College: "+col.name+". ":"")+"County: "+(c?c.name:"Not sure or not listed")+". Links checked "+CHECKED+".")+"</p>"+clone.innerHTML+"<div class=\"note\"><p><strong>About these links:</strong> Websites change. If a link does not work, search for the name of the agency or ask your college. A link does not mean you will get a service. Each program decides who it can help. This page does not apply for anything and cannot tell you whether you qualify.</p></div></main><footer><p>Developed by Educational Management Resources Group (EMRG).</p></footer></body></html>";
+  var title="My results"+(col?" - "+col.name:"");
+  var doc="<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>"+esc(title)+"</title><style>"+css+"</style></head><body><header><h1>"+esc(title)+"</h1></header><main><h2>Your results</h2><p>"+esc((col?"College: "+col.name+". ":"")+"County: "+(c?c.name:"Not sure or not listed")+". Links checked "+CHECKED+".")+"</p>"+clone.innerHTML+"<div class=\"note\"><p><strong>About these links:</strong> Websites change. If a link does not work, search for the name of the agency or ask your college. A link does not mean you will get a service. Each program decides who it can help. This page does not apply for anything and cannot tell you whether you qualify.</p></div></main><footer><p>Developed by Educational Management Resources Group (EMRG).</p></footer></body></html>";
   try{
    var blob=new Blob([doc],{type:"text/html;charset=utf-8"}), url=URL.createObjectURL(blob), a=document.createElement("a");
-   a.href=url; a.download="My_Links.html"; a.style.display="none"; document.body.appendChild(a); a.click();
+   a.href=url; a.download="My_Results.html"; a.style.display="none"; document.body.appendChild(a); a.click();
    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); },1000);
-   $("copyMsg").textContent="Your links were saved in a file named My_Links.html. Open it from your downloads to click the links.";
-  }catch(x){ $("copyMsg").textContent="Saving is not available in this browser. Use Copy my links instead."; }
+   $("copyMsg").textContent="Your results were saved in a file named My_Results.html. Open it from your downloads to click the links.";
+  }catch(x){ $("copyMsg").textContent="Saving is not available in this browser. Use Copy my results instead."; }
  }
  $("saveBtn").addEventListener("click",saveFile);
  function fallback(){ $("fallbackBox").hidden=false; $("fallback").value=lastText; $("fallback").focus(); $("fallback").select(); $("copyMsg").textContent="Copy the text in the box below."; }
  $("copyBtn").addEventListener("click",function(){
   if(navigator.clipboard && navigator.clipboard.writeText){
-   navigator.clipboard.writeText(lastText).then(function(){ $("fallbackBox").hidden=true; $("copyMsg").textContent="Your links were copied."; },fallback);
+   navigator.clipboard.writeText(lastText).then(function(){ $("fallbackBox").hidden=true; $("copyMsg").textContent="Your results were copied."; },fallback);
   } else { fallback(); }
  });
 })();
