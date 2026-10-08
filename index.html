@@ -112,6 +112,7 @@ footer p{margin:0 0 .5rem}
   <p id="resSummary"></p>
   <div class="row noprint" style="margin-top:0;margin-bottom:1rem">
    <button type="button" class="btn" id="copyBtn">Copy my links</button>
+   <button type="button" class="btn2" id="saveBtn">Save my links with clickable links</button>
    <button type="button" class="btn2" id="printBtn">Print my links</button>
    <button type="button" class="btn2" id="backBtn">Change my choices</button>
   </div>
@@ -119,7 +120,7 @@ footer p{margin:0 0 .5rem}
   <div id="fallbackBox" hidden class="noprint"><p class="hint">Your browser did not let this page copy for you. Select the text below and copy it.</p><label class="lbl" for="fallback">Links to copy</label><textarea id="fallback" readonly></textarea></div>
   <div id="resBody"></div>
   <div class="note"><p><strong>About these links:</strong> The links on this page were checked on <span id="checked"></span>. Websites change. If a link does not work, search for the name of the agency or ask your college. A link does not mean you will get a service. Each program decides who it can help.</p></div>
-  <p class="noprint hint">You can also print this page with Ctrl+P (Windows) or Cmd+P (Mac).</p>
+  <p class="noprint hint">A printed page cannot be clicked. To keep links you can click, choose “Save my links with clickable links.” It saves a small web page to your device. Open it any time and tap or click a link to go to the website. You can also print this page with Ctrl+P (Windows) or Cmd+P (Mac).</p>
  </section>
 </main>
 <footer>
@@ -136,7 +137,7 @@ const TOPICS = [
  {id:"housing",label:"Housing and emergency help",college:"Ask student services or the basic needs center about emergency housing help."},
  {id:"health",label:"Health care and coverage",college:"Ask whether your college has a health center."},
  {id:"mental",label:"Mental health and crisis support",college:"Ask whether your college has counseling services.",safety:"If you or someone you know is in crisis or danger: Call 988, the national mental health hotline, or call 911 in an emergency."},
- {id:"childcare",label:"Child care",college:"Ask whether your college has a child care center or a program for student parents."},
+ {id:"childcare",label:"Childcare",college:"Ask whether your college has a childcare center or a program for student parents."},
  {id:"transport",label:"Transportation",college:"Ask your coach or support team what help with transportation your college offers."},
  {id:"legal",label:"Free legal help",college:"Ask student services whether your college offers free legal help or can refer you."},
  {id:"immigration",label:"Immigration legal help",college:"Ask student services whether your college offers free immigration legal help or can refer you.",note:"This tool does not ask about anyone’s status and does not save anything. The California Attorney General says only lawyers, accredited representatives, and recognized organizations can give immigration legal advice. Notarios and notary publics cannot."},
@@ -176,10 +177,10 @@ const STATE = {
   L("988 Suicide and Crisis Lifeline","https://988lifeline.org","Free, confidential support by call, text, or chat, 24 hours a day."),
   L("California Community Colleges Health and Wellness","https://www.cccstudentmentalhealth.org/","Run by the California Community Colleges Chancellor’s Office. Resources on mental health, health services, coping skills, and crisis services.")],
  childcare:[
-  L("California Child Care Resource and Referral Network","https://rrnetwork.org/","Look up your local child care referral agency by ZIP code. The Network is a group of state-funded local agencies."),
-  L("My Child Care Plan","https://mychildcareplan.org/","A short questionnaire that suggests child care options and links to the local agency directory."),
-  L("State list of child care referral agencies","https://www.cde.ca.gov/sp/cd/re/rragencylist.asp","Run by the California Department of Education. Explains referral services. Last reviewed June 16, 2026."),
-  L("State child care payment programs","https://www.cdss.ca.gov/inforesources/calworks-child-care/subsidized-programs","Run by the California Department of Social Services. An overview of the state’s subsidized child care programs.")],
+  L("California Child Care Resource and Referral Network","https://rrnetwork.org/","Look up your local childcare referral agency by ZIP code. The Network is a group of state-funded local agencies."),
+  L("My Child Care Plan","https://mychildcareplan.org/","A short questionnaire that suggests childcare options and links to the local agency directory."),
+  L("State list of childcare referral agencies","https://www.cde.ca.gov/sp/cd/re/rragencylist.asp","Run by the California Department of Education. Explains referral services. Last reviewed June 16, 2026."),
+  L("State childcare payment programs","https://www.cdss.ca.gov/inforesources/calworks-child-care/subsidized-programs","Run by the California Department of Social Services. An overview of the state’s subsidized childcare programs.")],
  transport:[],
  legal:[
   L("LawHelpCA","https://www.lawhelpca.org/","Maintained by the Legal Aid Association of California, a nonprofit. Self-help legal articles and a search for local legal aid."),
@@ -218,7 +219,7 @@ const COUNTIES = [
   transport:[L("AC Transit discounts","https://www.actransit.org/discounts","Youth fares and Clipper START, a low-income fare. No college student pass is listed."),
              L("BART discounts","https://www.bart.gov/discounts","Lists discounts, including Clipper START, which you set up through Clipper.")],
   veterans:[L("Alameda County Veterans Service Office","https://socialservices.alamedacountyca.gov/our-services/Veterans/index","Help with VA and CalVet claims.")],
-  childcare:[L("4Cs of Alameda County","https://4calameda.org/","A nonprofit child care referral agency. The page says the referral service is free for any family."),
+  childcare:[L("4Cs of Alameda County","https://4calameda.org/","A nonprofit childcare referral agency. The page says the referral service is free for any family."),
              L("State list of Alameda County referral agencies","https://www.cde.ca.gov/sp/cd/re/alamedarr.asp","Run by the California Department of Education. Names three agencies for the county.")],
   immigration:[L("Alameda County immigrant relations","https://socialservices.alamedacountyca.gov/about-us/Government-and-Community-Relations/programs-and-initiatives/immigrant-relations","A list of nonprofit immigration legal providers, a resource guide, and Know Your Rights cards.")]}),
  C("kern","Kern County",{
@@ -241,7 +242,7 @@ const COUNTIES = [
              L("LA Metro: LIFE low-income fare program","https://www.metro.net/fares/life/","A fare assistance program, with how to apply."),
              L("LA Metro: fares overview","https://www.metro.net/riding/fares/","Lists GoPass, College U-Pass, and LIFE.")],
   veterans:[L("LA County Military and Veterans Affairs","https://mva.lacounty.gov/","The county department for veterans. Has appointment and contact options.")],
-  childcare:[L("State list of LA County referral agencies","https://www.cde.ca.gov/Sp/cd/re/larr.asp","Run by the California Department of Education. Lists eight child care referral agencies in the county. Reviewed January 23, 2026.")],
+  childcare:[L("State list of LA County referral agencies","https://www.cde.ca.gov/Sp/cd/re/larr.asp","Run by the California Department of Education. Lists eight childcare referral agencies in the county. Reviewed January 23, 2026.")],
   immigration:[L("LA County Office of Immigrant Affairs","https://oia.lacounty.gov/immigration-information/","Explains who can give immigration legal advice and points to ways to find legal help. Last modified April 4, 2026.")]}),
  C("orange","Orange County",{
   calfresh:[L("CalFresh, Orange County Social Services Agency","https://ssa.ocgov.com/cash-calfresh/calfresh","Ways to apply, forms, and links to offices."),
@@ -254,19 +255,19 @@ const COUNTIES = [
              L("OCTA: College Fares","https://octa.net/getting-around/bus/oc-bus/fares-and-passes/overview/college-fares/","A reduced monthly pass for students taking 9 or more credits."),
              L("OCTA: fares overview","https://octa.net/fares","Lists the college student fare, the Community College Program, and other discounts.")],
   veterans:[L("Orange County Veterans Service Office","https://veterans.oc.gov/about-us","What the office does, its address and hours, and how to book an appointment.")],
-  childcare:[L("Children’s Home Society: find a child care provider","https://chs-ca.org/programs-services/find-a-child-care-provider/","A nonprofit. Online referral search for Orange County. The page says referral services are free.")],
+  childcare:[L("Children’s Home Society: find a childcare provider","https://chs-ca.org/programs-services/find-a-child-care-provider/","A nonprofit. Online referral search for Orange County. The page says referral services are free.")],
   immigration:[L("Orange County Office of Immigrant and Refugee Affairs","https://ssa.ocgov.com/OIRA","A resource guide in seven languages and a list of immigration legal service providers.")]}),
  C("sacramento","Sacramento County",{
   calfresh:[L("CalFresh, Sacramento County Department of Human Assistance","https://ha.saccounty.gov/benefits/CalFresh/Pages/default.aspx","How to apply, plus six in-person offices with addresses and hours.")],
   transport:[L("SacRT: student passes","https://www.sacrt.com/student-passes/","Describes the Los Rios Universal Transit Pass for college students. The page says you need the app to activate the Los Rios pass.")],
   veterans:[L("Sacramento County Veterans Services","https://ha.saccounty.gov/benefits/VeteransServices","Helps veterans and dependents with VA and other benefit claims.")],
-  childcare:[L("Child Action: find a provider","https://childaction.org/find-a-provider/","A child care referral agency. The page says the service is free for Sacramento County families.")],
+  childcare:[L("Child Action: find a provider","https://childaction.org/find-a-provider/","A childcare referral agency. The page says the service is free for Sacramento County families.")],
   _no211:true}),
  C("eldorado","El Dorado County",{
   calfresh:[L("CalFresh, El Dorado County Human Services","https://www.eldoradocounty.ca.gov/Health-Well-Being/Human-Services/Food-Assistance/CalFresh","How to apply, plus the Placerville and South Lake Tahoe offices.")],
   transport:[L("El Dorado Transit: Los Rios students ride free","https://eldoradotransit.com/news/sac-state-los-rios-students-ride-free/","The page says Los Rios students ride free with the Los Rios Student ZipPass. The page has no date, so check with your college.")],
   veterans:[L("El Dorado County Veteran Services","https://www.eldoradocounty.ca.gov/Services/Assistance-Programs/Veteran-Services","A county department that helps veterans, dependents, and survivors get benefits.")],
-  childcare:[L("Catalyst Community: families","https://www.catalystcomm.org/families/","The state lists Catalyst Community as the child care referral agency for El Dorado County.")],
+  childcare:[L("Catalyst Community: families","https://www.catalystcomm.org/families/","The state lists Catalyst Community as the childcare referral agency for El Dorado County.")],
   legal:[L("El Dorado Superior Court Self-Help Center","https://www.eldorado.courts.ca.gov/self-help","Run by the state court, not the county. Workshops, online forms, and advisors for family law and small claims.")],
   internet:[L("El Dorado County Library","https://eldoradolibrary.org/about-the-library/","The page says all locations have free Wi-Fi and public computers.")],
   _no211:true}),
@@ -283,7 +284,7 @@ const COUNTIES = [
              L("Omnitrans: fares","https://omnitrans.org/buy-a-pass/fares/","Lists fares and reduced fares. K-12 students ride free with a student ID.")],
   legal:[L("San Bernardino Superior Court self-help and community resources","https://sanbernardino.courts.ca.gov/self-help-community-resources","Run by the state court, not the county. Lists legal aid organizations and a lawyer referral service.")],
   veterans:[L("San Bernardino County Department of Veterans Affairs","https://va.sbcounty.gov/about-us/","Helps veterans and families get benefits. Has a link to the College Fee Waiver.")],
-  childcare:[L("Child Care Resource Center: finding child care","https://www.ccrcca.org/parents/finding-child-care/","A nonprofit that the state lists as a child care referral agency with a San Bernardino office.")]})
+  childcare:[L("Child Care Resource Center: finding childcare","https://www.ccrcca.org/parents/finding-child-care/","A nonprofit that the state lists as a childcare referral agency with a San Bernardino office.")]})
 ];
 
 // College-specific links. Checked October 7, 2026. Only pages on the college's own site that loaded when fetched.
@@ -303,7 +304,7 @@ const COLLEGES = [
    health:[L("Student Health and Wellness Center","https://www.bakersfieldcollege.edu/services-and-resources/student-health-wellness-center/index.html","Low-cost basic medical help and mental health support. Where: Administrative Services 102.")],
    mental:[L("Student Health and Wellness Center: services","https://www.bakersfieldcollege.edu/services-and-resources/student-health-wellness-center/services.html","Medical care, counseling and crisis support, and health education.")],
    childcare:[L("Child Development Center","https://www.bakersfieldcollege.edu/services-and-resources/child-development-center.html","Licensed care for children ages 18 months to 5 years. Where: 1801 Panorama Drive."),
-              L("Resources for Student Parents","https://www.bakersfieldcollege.edu/services-and-resources/nexus/resources-for-student-parents.html","Priority registration, financial aid, and child care options for student parents.")],
+              L("Resources for Student Parents","https://www.bakersfieldcollege.edu/services-and-resources/nexus/resources-for-student-parents.html","Priority registration, financial aid, and childcare options for student parents.")],
    transport:[LW("Transportation","https://www.bakersfieldcollege.edu/campus-life/transportation.html","Information about Golden Empire Transit student bus passes, picked up at the Office of Student Life.","The page mentions free bus rides through June 2026. Check whether the offer continues.")],
    immigration:[L("Legal services for undocumented students","https://www.bakersfieldcollege.edu/campus-life/student-communities/undocumented-students/legal-services.html","Free immigration legal services offered with the UFW Foundation and provided remotely."),
                 L("Undocumented Students","https://www.bakersfieldcollege.edu/campus-life/student-communities/undocumented-students/index.html","Counseling and academic support for undocumented students."),
@@ -323,7 +324,7 @@ const COLLEGES = [
             L("TRIO Student Support Services","https://www.bakersfieldcollege.edu/services-and-resources/trio-student-support-services.html","A federally funded program at the Panorama Campus."),
             L("Rising Scholars Program","https://www.bakersfieldcollege.edu/academics/rising-scholars-program/index.html","Support for students who are or were incarcerated.")]}},
  {id:"saddleback",name:"Saddleback College (Mission Viejo)",county:"orange",checked:"October 7, 2026",
-  hub:[L("Student Support","https://www.saddleback.edu/student-support","Introduces tutoring, counseling, the library, career support, basic needs, health, child care, and technical help.")],
+  hub:[L("Student Support","https://www.saddleback.edu/student-support","Introduces tutoring, counseling, the library, career support, basic needs, health, childcare, and technical help.")],
   topics:{
    calfresh:[L("Basic Needs Center","https://www.saddleback.edu/student-support/basic-needs-center","The page says staff can help with CalFresh applications. Where: College Center 102.")],
    food:[L("Basic Needs Center","https://www.saddleback.edu/student-support/basic-needs-center","A food pantry, clothing closet, hygiene items and diapers, case worker appointments, textbook vouchers, and a Student Emergency Grant. Where: College Center 102. See the page for dates and how to sign up.")],
@@ -356,7 +357,7 @@ const COLLEGES = [
    internet:[L("Computers, Printing, and Technology","https://researchguides.elac.edu/computer","Open computer labs and laptop and Chromebook lending at the Tech Help Desk. The page was updated October 2, 2026.")],
    health:[LW("Student Health Center","https://www.elac.edu/student-services/spr/student-health-center","Medical and therapy appointments through a campus clinic. Where: F5-302.","The page lists hours from 2023. Check the current hours.")],
    mental:[L("Student Health Center: mental health","https://www.elac.edu/student-services/spr/student-health-center/mental-health","Telehealth therapy, support groups, and a support center for domestic violence and sexual assault. Where: F5-302.")],
-   childcare:[L("Child Development Center","https://elac.edu/student-services/spr/cdc/Admission-Priorities-Requirements-and-Fees","Child care for student parents, with a sliding fee scale. Where: A1 building."),
+   childcare:[L("Child Development Center","https://elac.edu/student-services/spr/cdc/Admission-Priorities-Requirements-and-Fees","Childcare for student parents, with a sliding fee scale. Where: A1 building."),
               L("Student Parent Services","https://elac.edu/student-services/ab-2881","Lists campus and outside supports for student parents.")],
    immigration:[L("Dream Resource Center services","https://elac.edu/student-services/spr/one-zone/drc/services","Free or low-cost attorney consultations and free immigration legal services for students, by appointment. Where: E1-142.")],
    veterans:[LW("Veterans Resource Center","https://www.elac.edu/student-services/spr/veterans-resource-center","VA education benefit certification, counseling, an equipment loan program, and a peer advisor program.","The page still has an old notice about remote-only service. Check how to reach the center.")],
@@ -387,7 +388,7 @@ const flcTopics = () => ({
  health:[L("Student Health and Wellness","https://flc.losrios.edu/campus-life/student-health-and-wellness","Health visits and wellness services. Where: Falcons Roost, Room FR-115.")],
  mental:[L("Student Health and Wellness","https://flc.losrios.edu/campus-life/student-health-and-wellness","Counseling and wellness services. Where: Falcons Roost, Room FR-115."),
          L("Counseling","https://flc.losrios.edu/student-resources/counseling","Academic, career, and personal counseling at all three sites.")],
- childcare:[L("Family Resources","https://flc.losrios.edu/student-resources/family-resources","Child care and parent resources for student parents."),
+ childcare:[L("Family Resources","https://flc.losrios.edu/student-resources/family-resources","Childcare and parent resources for student parents."),
             L("CalWORKs","https://flc.losrios.edu/student-resources/support-services/calworks","Support for students in CalWORKs. Where: Aspen Hall FL1-108.")],
  immigration:[L("Legal Services for Undocumented Students","https://flc.losrios.edu/student-resources/support-services/undocu-falcons-center/legal-services-for-undocumented-students","Free immigration legal consultations through CHIRLA, in person or online.")],
  veterans:[L("Veterans Success Center","https://flc.losrios.edu/student-resources/support-services/veterans-success-center","Help with VA education benefits. Where: PE building, Room 119.")],
@@ -417,7 +418,7 @@ COLLEGES.push(
    health:[L("Wellness Center","https://www.berkeleycitycollege.edu/wellness","Mental health services, peer support, and a list of community providers. The center moved to BCC West, 2118 Milvia Street, Room 504.")],
    mental:[L("Wellness Center","https://www.berkeleycitycollege.edu/wellness","Mental health support. Where: BCC West, 2118 Milvia Street, Room 504."),
            L("Counseling","https://www.berkeleycitycollege.edu/counseling","Academic counseling with drop-in help. Where: second floor, 2050 Center Street.")],
-   childcare:[L("CalWORKs","https://www.berkeleycitycollege.edu/calworks","CalWORKs support, including child care help. Where: third floor, Main Building.")],
+   childcare:[L("CalWORKs","https://www.berkeleycitycollege.edu/calworks","CalWORKs support, including childcare help. Where: third floor, Main Building.")],
    transport:peraltaTransit,
    immigration:[L("Undocumented Community Resource Center","https://www.berkeleycitycollege.edu/ucrc","Dream Act and AB 540 help and free immigration legal consultations. Where: Learning Resource Center, Rooms 113 and 114.",)],
    veterans:[LW("Veterans Resource Center","https://www.berkeleycitycollege.edu/vets","Help with benefits and support for veterans. Where: Room 347.","Parts of this page are out of date. Ask the office to confirm.")],
@@ -455,8 +456,8 @@ COLLEGES.push(
    health:[LW("Wellness Center","https://laney.edu/health_center","Free mental health support and workshops. Where: Tower Building, Room 250.","The page has some unfinished items (\"TBA\"). Check hours with the office.")],
    mental:[LW("Wellness Center","https://laney.edu/health_center","Free mental health support, workshops, and crisis resources. Where: Tower Building, Room 250.","The page has some unfinished items (\"TBA\"). Check hours with the office."),
            L("Counseling","https://laney.edu/counseling","Academic counseling with online drop-in. Where: Library, third floor.")],
-   childcare:[L("Parenting Scholars","https://laney.edu/calworks/","Support for student parents, including child care help. Where: Building A, Room 201."),
-              L("Child care at the Peralta colleges","https://www.peralta.edu/admissions/student-resources/child-care","Lists the child care centers at Laney and Merritt.")],
+   childcare:[L("Parenting Scholars","https://laney.edu/calworks/","Support for student parents, including childcare help. Where: Building A, Room 201."),
+              L("Childcare at the Peralta colleges","https://www.peralta.edu/admissions/student-resources/child-care","Lists the childcare centers at Laney and Merritt.")],
    transport:[peraltaShuttle].concat(peraltaTransit),
    immigration:[L("Legal Services for Undocumented Students","https://laney.edu/ucrc/legal-services","Free immigration legal services with a booking link.")],
    veterans:[LW("Veterans Resource Center","https://laney.edu/veteran_affairs","Education benefits help and support for veterans. Where: Building E, Room 260.",OLD)],
@@ -477,7 +478,7 @@ COLLEGES.push(
    health:[L("Wellness Center","https://merritt.edu/wellness-center","Free counseling and referrals for shelter and food. Where: Room R-106.")],
    mental:[L("Wellness Center","https://merritt.edu/wellness-center","Free counseling. Where: Room R-106."),
            L("Counseling","https://merritt.edu/counseling","Academic counseling. Where: Counseling Center, R Building, Room 109.")],
-   childcare:[L("Child care at the Peralta colleges","https://www.peralta.edu/admissions/student-resources/child-care","Lists the child care centers at Laney and Merritt."),
+   childcare:[L("Childcare at the Peralta colleges","https://www.peralta.edu/admissions/student-resources/child-care","Lists the childcare centers at Laney and Merritt."),
               L("CalWORKs","https://merritt.edu/calworks","CalWORKs support. Where: Building R-128B.")],
    transport:[peraltaShuttle].concat(peraltaTransit),
    veterans:[LW("Veterans Services Program","https://merritt.edu/veterans-services","Support for veterans and their families.",OLD)],
@@ -518,7 +519,7 @@ COLLEGES.push(
    housing:[L("Housing","https://basicneeds.fullcoll.edu/hrc/housing/","Housing help, shelter and county referrals. Where: Building 1000, Room 1018.")],
    health:[L("Student Health and Wellness Center","https://health.fullcoll.edu/","Medical, mental health, and wellness services. Where: Student Support Center, Room 108.")],
    mental:[L("Health Center services","https://health.fullcoll.edu/services/","Short-term counseling and other clinical services.")],
-   childcare:[L("Family","https://basicneeds.fullcoll.edu/hrc/family/","A diaper program, child care and parent resources. Where: Building 1000, Room 1018."),
+   childcare:[L("Family","https://basicneeds.fullcoll.edu/hrc/family/","A diaper program, childcare and parent resources. Where: Building 1000, Room 1018."),
               L("CalWORKs","https://calworks.fullcoll.edu/","Support for students in CalWORKs. Where: Building 2000, Room 2020.")],
    veterans:[L("Veterans Resource Center","https://veterans.fullcoll.edu/","VA benefits, certification, and counseling. Where: Student Support Center.")],
    foster:[L("Foster Youth Success Initiative","https://fosteryouth.fullcoll.edu/","Support for current and former foster youth. Where: Student Support Center, Room 208.")],
@@ -531,7 +532,7 @@ COLLEGES.push(
   }},
 
  {id:"noce",name:"North Orange Continuing Education (Anaheim Campus, Cypress and Wilshire Centers)",county:"orange",checked:checkedDate,
-  hub:[L("Community Resources","https://www.noce.edu/student-services/community-resources/","Lists of outside resources for food, housing, legal help, child care, and health. The school does not endorse them."),
+  hub:[L("Community Resources","https://www.noce.edu/student-services/community-resources/","Lists of outside resources for food, housing, legal help, childcare, and health. The school does not endorse them."),
        L("Locations","https://www.noce.edu/about/locations/","The Anaheim Campus, Cypress Center, and Wilshire Center (Fullerton), with hours. A construction notice is listed for Anaheim.")],
   topics:{
    food:[L("Food Pantry","https://www.noce.edu/info/students/food-pantry/","A pantry on the Anaheim Campus (Room 156), with information about Cypress and Fullerton.")],
@@ -556,7 +557,7 @@ COLLEGES.push(
    health:[L("Health Services","https://www.avc.edu/students/student-services/health-services","Telehealth, a health clinic, and vision and dental vouchers. Where: Room T-100, Lancaster.")],
    mental:[L("Health Services","https://www.avc.edu/students/student-services/health-services","Mental health counseling. Where: Room T-100, Lancaster."),
            L("Counseling","https://www.avc.edu/counseling","Academic and personal counseling and transfer planning.")],
-   childcare:[L("Student Parents","https://www.avc.edu/students/student-services/student-parents","An overview of child care, priority registration, and referrals for student parents."),
+   childcare:[L("Student Parents","https://www.avc.edu/students/student-services/student-parents","An overview of childcare, priority registration, and referrals for student parents."),
               L("Child Development Center","https://www.avc.edu/childdev","Preschool programs near parking lot B1 on the Lancaster campus. The page lists a waitlist."),
               L("CalWORKs","https://www.avc.edu/students/student-services/calworks-program","Support for students in CalWORKs.")],
    transport:[LW("Transportation","https://www.avc.edu/basic-needs/transportation","A digital Metro GoPass issued by the Basic Needs Center, plus Kern Transit and Metrolink information.","The page says Kern Transit rides are free through June 2026. Ask whether that continues."),
@@ -582,7 +583,7 @@ COLLEGES.push(
    mental:[L("Wellness Services","https://www.vvc.edu/wellness-services","Peer support and mental health services. Where: Building 44, Room 103."),
            L("Counseling","https://www.vvc.edu/vvc-counseling","Counseling appointments. Where: Building 23.")],
    childcare:[L("Parenting Resources","https://www.vvc.edu/parenting-resources","The Child Development Center (the page lists a waitlist) and after-school programs."),
-              L("Student Parents at VVC","https://www.vvc.edu/student-parents-vvc","A hub for financial aid, child care, food, housing, and wellness resources for student parents.")],
+              L("Student Parents at VVC","https://www.vvc.edu/student-parents-vvc","A hub for financial aid, childcare, food, housing, and wellness resources for student parents.")],
    transport:[L("Transportation Resources","https://www.vvc.edu/transportation-resources","The page says students ride VVTA Fixed Route and County Route buses free with a VVC Student ID."),
               L("VVTA: for students","https://vvta.org/for-students","VVTA’s student programs, including Victor Valley College.")],
    immigration:[L("Steps to Enrollment for undocumented students","https://www.vvc.edu/steps-enrollment-undocumented-students-0","Enrollment steps and a list of outside legal resources. The page does not describe a Dream Resource Center.")],
@@ -730,7 +731,7 @@ const LOCAL = {
    L("LA County Library: job help","https://lacountylibrary.org/jobhelp/","Free online courses, job coaching, and resume help with an LA County Library card. Last modified June 5, 2026.")
   ],
   childcare: [
-   L("LA County Office for the Advancement of Early Care and Education: Child Care Choices","https://childcare.lacounty.gov/childcarechoices/","A county program to help families find child care. The page says the voucher part is limited to certain ZIP codes. Read it before relying on it.")
+   L("LA County Office for the Advancement of Early Care and Education: Child Care Choices","https://childcare.lacounty.gov/childcarechoices/","A county program to help families find childcare. The page says the voucher part is limited to certain ZIP codes. Read it before relying on it.")
   ],
   money: [
    L("United Way of Greater LA: free tax help","https://unitedwayla.org/our-work/supporting-people-in-crisis/income-tax-assistance/","Describes free volunteer tax preparation (VITA) and points to the Free Tax Prep LA site. The page was last modified in January 2025."),
@@ -1056,6 +1057,24 @@ COUNTIES.forEach(c=>{ delete c.t._no211; });
   results.hidden=true; formArea.hidden=false; $("copyMsg").textContent=""; $("fallbackBox").hidden=true; $("s1").setAttribute("tabindex","-1"); $("s1").focus(); window.scrollTo(0,0);
  });
  $("printBtn").addEventListener("click",function(){ try{ window.print(); }catch(x){ $("copyMsg").textContent="Printing is not available here. Use Ctrl+P or Cmd+P."; } });
+
+ function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+ function saveFile(){
+  var col=collegeById(college.value), cid=county.value, c=(cid&&cid!=="other")?countyById(cid):null;
+  var clone=$("resBody").cloneNode(true);
+  Array.prototype.forEach.call(clone.querySelectorAll("[id]"),function(n){ n.removeAttribute("id"); });
+  Array.prototype.forEach.call(clone.querySelectorAll("[aria-labelledby]"),function(n){ n.removeAttribute("aria-labelledby"); });
+  var css="body{margin:0;background:#F8F5E9;color:#333;font-family:Verdana,'DejaVu Sans',sans-serif;font-size:1.125rem;line-height:1.6}header{background:#013220;color:#F8F5E9;padding:1.25rem 1rem;border-bottom:5px solid #C6A15B}header h1{margin:0;font-size:1.6rem;line-height:1.3}main{max-width:52rem;margin:0 auto;padding:1rem}h2,h3{color:#013220;font-size:1.25rem;margin:1.5rem 0 .5rem}h4{color:#013220;font-size:1.125rem;margin:1rem 0 .4rem}a{color:#013220;font-weight:bold;text-decoration:underline}a:focus{outline:3px solid #C6A15B;outline-offset:2px}ul{list-style:none;padding:0;margin:0}li{background:#fff;border:2px solid #A3B18A;border-radius:8px;padding:.6rem .8rem;margin:0 0 .6rem}.d{display:block;font-size:1rem}.sr{position:absolute;left:-9999px}.note{background:#DCEBE5;border-left:6px solid #013220;padding:.75rem 1rem;margin:0 0 1rem}.warn{background:#F7E0DB;border-left:6px solid #D97A6A;padding:.75rem 1rem;margin:0 0 1rem;color:#5a1f14}.empty{font-size:1rem}footer{max-width:52rem;margin:0 auto;padding:1rem;font-size:1rem}";
+  var title="My links"+(col?" - "+col.name:"");
+  var doc="<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>"+esc(title)+"</title><style>"+css+"</style></head><body><header><h1>"+esc(title)+"</h1></header><main><h2>Your links</h2><p>"+esc((col?"College: "+col.name+". ":"")+"County: "+(c?c.name:"Not sure or not listed")+". Links checked "+CHECKED+".")+"</p>"+clone.innerHTML+"<div class=\"note\"><p><strong>About these links:</strong> Websites change. If a link does not work, search for the name of the agency or ask your college. A link does not mean you will get a service. Each program decides who it can help. This page does not apply for anything and cannot tell you whether you qualify.</p></div></main><footer><p>Developed by Educational Management Resources Group (EMRG).</p></footer></body></html>";
+  try{
+   var blob=new Blob([doc],{type:"text/html;charset=utf-8"}), url=URL.createObjectURL(blob), a=document.createElement("a");
+   a.href=url; a.download="My_Links.html"; a.style.display="none"; document.body.appendChild(a); a.click();
+   setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); },1000);
+   $("copyMsg").textContent="Your links were saved in a file named My_Links.html. Open it from your downloads to click the links.";
+  }catch(x){ $("copyMsg").textContent="Saving is not available in this browser. Use Copy my links instead."; }
+ }
+ $("saveBtn").addEventListener("click",saveFile);
  function fallback(){ $("fallbackBox").hidden=false; $("fallback").value=lastText; $("fallback").focus(); $("fallback").select(); $("copyMsg").textContent="Copy the text in the box below."; }
  $("copyBtn").addEventListener("click",function(){
   if(navigator.clipboard && navigator.clipboard.writeText){
