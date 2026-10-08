@@ -84,13 +84,13 @@ footer p{margin:0 0 .5rem}
  <div class="wrap">
   <p class="kicker">Student tool</p>
   <h1>Find Help Near Me</h1>
-  <p>Choose your college and the kinds of help you want. You will get links to your college, your county, and California.</p>
+  <p>Choose your college and the type of help you want. You will get links to resources at your college, in your county, and California-wide.</p>
  </div>
 </header>
 <noscript><div class="warn" style="max-width:52rem;margin:1rem auto;padding:1rem"><p>This tool needs JavaScript. Please turn it on, or ask your college for a printed list of help.</p></div></noscript>
 <main id="main">
  <div id="formArea" class="noprint">
-  <div class="note"><p><strong>Before you start:</strong> This tool does not apply for anything, does not save anything, and cannot tell you whether you qualify for any program. It points you to official websites so you can ask. Asking for help is a good first step.</p></div>
+  <div class="note"><p><strong>Before you start:</strong> This tool does not apply for anything, does not save anything, and cannot tell you whether you qualify for any program or resource. Instead, it points you to official websites, so you can follow up for more information and contact them for help. Asking for help is a good first step.</p></div>
   <form id="form" novalidate>
    <h2 id="s1">Step 1: Choose your college</h2>
    <label class="lbl" for="college">My college</label>
@@ -313,7 +313,7 @@ const COLLEGES = [
    foster:[L("NextUp","https://bakersfieldcollege.edu/enrollment-aid/eops/nextup.html","A support program for current and former foster youth. Where: Student Services Center, east wing, second floor.")],
    jobs:[L("Career Services","https://www.bakersfieldcollege.edu/services-and-resources/career-services/index.html","Career counseling, resume and job search tools, student job listings, and internship resources.")],
    money:[L("Financial Aid","https://www.bakersfieldcollege.edu/enrollment-aid/financial-aid/index.html","Grants, scholarships, work-study, and loans. Where: Welcome Center.")],
-   tutoring:[L("Tutoring and Labs","https://www.bakersfieldcollege.edu/services-and-resources/tutoring-labs/index.html","Free tutoring through the Math Learning Center, Student Success Lab, Tutoring Center, and Writing Center."),
+   tutoring:[L("Tutoring and Labs","https://www.bakersfieldcollege.edu/services-and-resources/tutoring-labs/index.html","Tutoring through the Math Learning Center, Student Success Lab, Tutoring Center, and Writing Center. The page says the Tutoring Center is free."),
              L("Tutoring Center","https://www.bakersfieldcollege.edu/services-and-resources/tutoring-labs/tutoring/index.html","Free tutoring at several campuses and by Zoom."),
              L("Writing Center","https://www.bakersfieldcollege.edu/services-and-resources/tutoring-labs/writing-center/index.html","Free one-on-one writing support at four locations.")],
    support:[L("Extended Opportunity Programs and Services (EOPS)","https://www.bakersfieldcollege.edu/enrollment-aid/eops/index.html","A support program. Where: Student Services Center, east wing, second floor."),
@@ -334,7 +334,7 @@ const COLLEGES = [
            L("Student Health and Wellness Center","https://www.saddleback.edu/student-support/student-health-wellness-center","Includes mental health services. It does not provide emergency care.")],
    childcare:[L("Child Care","https://www.saddleback.edu/student-support/child-care","The Child Development Center, with programs for children from 18 months to kindergarten.")],
    transport:[L("Free Bus Pass","https://www.saddleback.edu/student-support/free-bus-pass","Unlimited OC Bus rides through the OC Bus app, supported by the Associated Student Government.")],
-   immigration:[L("Undocumented Students (Monarch Scholars)","https://www.saddleback.edu/student-support/specialized-programs/xxxxx/undocumented-students","Free immigration consultations with community partners, plus help with AB 540 and the California Dream Act Application."),
+   immigration:[L("Undocumented Students (Monarch Scholars)","https://www.saddleback.edu/student-support/specialized-programs/undocumented-students","Free immigration consultations with community partners, plus help with AB 540 and the California Dream Act Application."),
                 L("CHIRLA Legal Services","https://www.saddleback.edu/student-support/specialized-programs/undocumented-students/chirla-legal-services","Immigration consultations offered through the college’s community partners.")],
    veterans:[L("Veterans Education and Transition Services (VETS)","https://www.saddleback.edu/student-support/specialized-programs/veterans-education-and-transition-services-vets","Veteran-specific counseling, financial aid guidance, and a Student Veterans Club. Where: Gateway 181.")],
    foster:[L("Foster Scholars (NextUp and Guardian Scholars)","https://www.saddleback.edu/student-support/specialized-programs/extended-opportunity-programs-and-services-department/foster-scholars","Financial, academic, and personal support for current and former foster youth."),
@@ -372,6 +372,312 @@ const COLLEGES = [
             L("CalWORKs","https://elac.edu/student-services/spr/calworks","Training and support services, priority registration, and case management. Where: Monterey Park Campus, A5."),
             LW("Diversabilities Support Program and Services (DSP&S)","https://www.elac.edu/student-services/spr/dsps","Academic adjustments such as note-taking help and test proctoring.","The page may be out of date.")]}}
 ];
+
+// Colleges added October 7, 2026. Only pages that loaded twice with real content on the topic.
+// Pages with placeholder text or old dates carry a warning (LW).
+const PH = "Some contact details on this page are blank placeholders. Ask the office for current details.";
+const OLD = "Parts of this page are out of date. Ask the office to confirm.";
+const checkedDate = "October 7, 2026";
+const flcTopics = () => ({
+ calfresh:[L("CalFresh","https://flc.losrios.edu/student-resources/support-services/calfresh","Explains CalFresh, how to apply through BenefitsCal or the county office, and local food banks.")],
+ food:[L("Student Food Cabinets","https://flc.losrios.edu/student-resources/support-services/student-food-cabinets","Free food and referrals. Where: Aspen Hall FL1-151 (Folsom), El Dorado Center Building B, and Rancho Cordova Center RCC1."),
+       L("Falcon Cares Program","https://flc.losrios.edu/student-resources/support-services/falcon-cares-program","Food, hygiene items, clothing, emergency fund, and laptop requests. Where: Aspen Hall FL1.")],
+ internet:[L("Borrow a laptop (Library Answers)","https://answers.library.losrios.edu/flc/faq/412953","How to borrow a laptop from the Folsom campus or El Dorado Center library. Updated February 23, 2026.")],
+ housing:[L("Housing Resources Request","https://flc.losrios.edu/student-resources/support-services/falcon-cares-program/housing-resources-request","A request form and a list of Sacramento-area housing resources.")],
+ health:[L("Student Health and Wellness","https://flc.losrios.edu/campus-life/student-health-and-wellness","Health visits and wellness services. Where: Falcons Roost, Room FR-115.")],
+ mental:[L("Student Health and Wellness","https://flc.losrios.edu/campus-life/student-health-and-wellness","Counseling and wellness services. Where: Falcons Roost, Room FR-115."),
+         L("Counseling","https://flc.losrios.edu/student-resources/counseling","Academic, career, and personal counseling at all three sites.")],
+ childcare:[L("Family Resources","https://flc.losrios.edu/student-resources/family-resources","Child care and parent resources for student parents."),
+            L("CalWORKs","https://flc.losrios.edu/student-resources/support-services/calworks","Support for students in CalWORKs. Where: Aspen Hall FL1-108.")],
+ immigration:[L("Legal Services for Undocumented Students","https://flc.losrios.edu/student-resources/support-services/undocu-falcons-center/legal-services-for-undocumented-students","Free immigration legal consultations through CHIRLA, in person or online.")],
+ veterans:[L("Veterans Success Center","https://flc.losrios.edu/student-resources/support-services/veterans-success-center","Help with VA education benefits. Where: PE building, Room 119.")],
+ foster:[L("Foster Youth and NextUp","https://flc.losrios.edu/student-resources/support-services/foster-youth-and-nextup-resources","NextUp support for current and former foster youth. Where: Aspen Hall FL1-108.")],
+ jobs:[L("Career and Transfer Center","https://flc.losrios.edu/academics/internships-and-career-services/career-and-transfer-center","Career counseling, job placement help, and Handshake. Where: Falcons Roost, Room FR-220.")],
+ money:[L("Financial Resources to Meet Basic Needs","https://flc.losrios.edu/student-resources/basic-needs-resources/financial-resources-to-meet-basic-needs","Emergency fund and other financial help."),
+        L("Financial Aid and Fees","https://flc.losrios.edu/admissions/financial-aid-and-fees","Financial aid information. Where: Aspen Hall FL1.")],
+ tutoring:[L("Tutoring and Academic Assistance","https://flc.losrios.edu/student-resources/tutoring-and-academic-assistance","Free tutoring at all three sites. Where: Cypress Hall FL2-240, El Dorado Center C-204, Rancho Cordova Center RCC1-203.")],
+ support:[L("EOPS and CARE","https://flc.losrios.edu/student-resources/support-services/eops-and-care","Extra counseling and support programs. Where: Aspen Hall FL1-108."),
+          L("Disability Services (DSPS)","https://flc.losrios.edu/student-resources/support-services/dsps","Accommodations and support. Where: Aspen Hall FL1-108.")]
+});
+const FLC_HUB = [L("Basic Needs Resources","https://flc.losrios.edu/student-resources/basic-needs-resources","Falcon Cares and the Basic Needs Center in the Welcome and Student Success Center.")];
+const peraltaTransit = [L("AC Transit EasyPass for Peralta students","https://www.peralta.edu/easypass","How Peralta students get the AC Transit EasyPass card, with Fall 2026 pass dates. Check whether the pass costs anything.")];
+const peraltaShuttle = L("Peralta Shuttle","https://www.peralta.edu/shuttle","A shuttle between Laney, College of Alameda, Berkeley City College, and Merritt. The page says you need a Peralta ID.");
+
+COLLEGES.push(
+ {id:"flc-folsom",name:"Folsom Lake College (Folsom Campus)",county:"sacramento",checked:checkedDate,hub:FLC_HUB,topics:flcTopics()},
+ {id:"flc-eldorado",name:"Folsom Lake College (El Dorado Center, Placerville)",county:"eldorado",checked:checkedDate,hub:FLC_HUB,topics:flcTopics()},
+ {id:"flc-ranchocordova",name:"Folsom Lake College (Rancho Cordova Center)",county:"sacramento",checked:checkedDate,hub:FLC_HUB,topics:flcTopics()},
+
+ {id:"bcc",name:"Berkeley City College (Berkeley)",county:"alameda",checked:checkedDate,
+  hub:[L("Student Services","https://www.berkeleycitycollege.edu/student-services","A directory of student services offices and room numbers.")],
+  topics:{
+   calfresh:[L("Basic Needs Center","https://www.berkeleycitycollege.edu/basic-needs","The page lists drop-in help with CalFresh applications. Where: Basic Needs Center, Room 14.")],
+   food:[L("Basic Needs Center","https://www.berkeleycitycollege.edu/basic-needs","A food pantry (Fall 2026 hours listed), clothing, and hygiene items. Where: Atrium in the basement, 2050 Center Street.")],
+   housing:[L("Basic Needs Center","https://www.berkeleycitycollege.edu/basic-needs","Links to housing resources. The page does not describe a campus housing program.")],
+   health:[L("Wellness Center","https://www.berkeleycitycollege.edu/wellness","Mental health services, peer support, and a list of community providers. The center moved to BCC West, 2118 Milvia Street, Room 504.")],
+   mental:[L("Wellness Center","https://www.berkeleycitycollege.edu/wellness","Mental health support. Where: BCC West, 2118 Milvia Street, Room 504."),
+           L("Counseling","https://www.berkeleycitycollege.edu/counseling","Academic counseling with drop-in help. Where: second floor, 2050 Center Street.")],
+   childcare:[L("CalWORKs","https://www.berkeleycitycollege.edu/calworks","CalWORKs support, including child care help. Where: third floor, Main Building.")],
+   transport:peraltaTransit,
+   immigration:[L("Undocumented Community Resource Center","https://www.berkeleycitycollege.edu/ucrc","Dream Act and AB 540 help and free immigration legal consultations. Where: Learning Resource Center, Rooms 113 and 114.",)],
+   veterans:[LW("Veterans Resource Center","https://www.berkeleycitycollege.edu/vets","Help with benefits and support for veterans. Where: Room 347.","Parts of this page are out of date. Ask the office to confirm.")],
+   foster:[L("NextUp","https://www.berkeleycitycollege.edu/nextup","Support for current and former foster youth. Where: Main Building, third floor, Room 349.")],
+   jobs:[LW("Career and Transfer Center","https://www.berkeleycitycollege.edu/career-transfer-center","Career counseling, resume help, Handshake, and transfer help. Where: Room 243.",OLD)],
+   money:[L("Financial Aid","https://www.berkeleycitycollege.edu/financial-aid","FAFSA and California Dream Act help. Where: Room 126.")],
+   tutoring:[L("Tutoring","https://www.berkeleycitycollege.edu/student-resources/tutoring","In-person and online tutoring and the Writing Center in the Learning Resource Center.")],
+   support:[L("EOPS and CARE","https://www.berkeleycitycollege.edu/eops-care","Extra counseling and support programs. Where: Main Building, third floor."),
+            L("Student Accessibility Services","https://www.berkeleycitycollege.edu/sas","Accommodations for students with disabilities. Where: Room 261.")]
+  }},
+
+ {id:"coa",name:"College of Alameda (Alameda)",county:"alameda",checked:checkedDate,
+  hub:[L("Basic Needs","https://alameda.edu/basic-needs","The Market, The Boutique, and a one-stop pantry. Where: F Building, first floor.")],
+  topics:{
+   calfresh:[L("Student-Parent Resources","https://alameda.edu/student-parent-resources","The page lists CalFresh help along with other resources for student parents.")],
+   food:[L("Basic Needs","https://alameda.edu/basic-needs","The Market (free produce and groceries), The Boutique (clothing), a one-stop pantry, and a diaper bank. Where: F Building, first floor.")],
+   internet:[L("Basic Needs: technology","https://alameda.edu/basic-needs","The page lists Wi-Fi hotspots and Chromebook checkout through the library.")],
+   health:[L("Health and Wellness Services","https://alameda.edu/health-wellness-services","The Wellness Center (mental health). Where: D Building, Room D203. The page says the Peralta Student Health Clinic is closed.")],
+   mental:[L("Health and Wellness Services","https://alameda.edu/health-wellness-services","Wellness Center mental health support. Where: D Building, Room D203."),
+           L("Counseling","https://alameda.edu/counseling","General counseling. Where: Building A.")],
+   childcare:[L("Student-Parent Resources","https://alameda.edu/student-parent-resources","A diaper bank, EOPS/CARE, CalWORKs, a lactation pod, and CalFresh help.")],
+   transport:peraltaTransit,
+   immigration:[L("Undocumented Community Resource Center","https://alameda.edu/ucrc","Support for undocumented students. Where: F Building, Room 117.")],
+   foster:[LW("NextUp","https://alameda.edu/next-up","Support for current and former foster youth.","The page gives two different locations. Ask the office where to go.")]
+  }},
+
+ {id:"laney",name:"Laney College (Oakland)",county:"alameda",checked:checkedDate,
+  hub:[L("Student Support Services","https://laney.edu/student-support-services","A directory of wellness, tutoring, technology, basic needs, and other services at 900 Fallon St.")],
+  topics:{
+   calfresh:[L("Eagle’s Nest Basic Needs","https://laney.edu/eaglesnest","A CalFresh section that links to the online application. The page does not describe staff helping with applications.")],
+   food:[L("Eagle’s Nest Basic Needs","https://laney.edu/eaglesnest","A food pantry, clothing closet, showers, and diaper bank. Where: Student Center (Basic Needs Office on the 4th floor)."),
+         L("Peralta Basic Needs","https://www.peralta.edu/basic-needs","District page linking to the basic needs centers at each Peralta college.")],
+   internet:[L("Student Tech Support Center","https://laney.edu/tech-center","Help with Wi-Fi, Canvas, and email, and an open computer lab. Where: Building F, Room 170. The page does not list laptop lending.")],
+   housing:[L("Eagle’s Nest Basic Needs","https://laney.edu/eaglesnest","A list of housing, shelter, and eviction-prevention organizations. The page does not describe campus housing.")],
+   health:[LW("Wellness Center","https://laney.edu/health_center","Free mental health support and workshops. Where: Tower Building, Room 250.","The page has some unfinished items (\"TBA\"). Check hours with the office.")],
+   mental:[LW("Wellness Center","https://laney.edu/health_center","Free mental health support, workshops, and crisis resources. Where: Tower Building, Room 250.","The page has some unfinished items (\"TBA\"). Check hours with the office."),
+           L("Counseling","https://laney.edu/counseling","Academic counseling with online drop-in. Where: Library, third floor.")],
+   childcare:[L("Parenting Scholars","https://laney.edu/calworks/","Support for student parents, including child care help. Where: Building A, Room 201."),
+              L("Child care at the Peralta colleges","https://www.peralta.edu/admissions/student-resources/child-care","Lists the child care centers at Laney and Merritt.")],
+   transport:[peraltaShuttle].concat(peraltaTransit),
+   immigration:[L("Legal Services for Undocumented Students","https://laney.edu/ucrc/legal-services","Free immigration legal services with a booking link.")],
+   veterans:[LW("Veterans Resource Center","https://laney.edu/veteran_affairs","Education benefits help and support for veterans. Where: Building E, Room 260.",OLD)],
+   foster:[L("NextUp","https://laney.edu/you-can-afford-laney-college/nextup","Support for current and former foster youth. Where: Building A, Room 106.")],
+   jobs:[L("Employment Services Center","https://laney.edu/employment","Resume help, job postings, and workshops. Where: Building E, Room 257.")],
+   money:[LW("Financial Aid","https://laney.edu/financial-aid","Financial aid information. Where: Building A, Room A-201.","The page still has old relief notices and old deadlines. Ask the office for current dates.")],
+   tutoring:[L("Tutoring","https://laney.edu/tutoring","Tutoring Center in A-105, Math Lab in G-201, and online tutoring.")],
+   support:[L("EOPS, CARE, CalWORKs, and NextUp","https://laney.edu/eops-care-b2b-calworks/","Extra counseling and support programs. Where: Building A, Room A-106.")]
+  }},
+
+ {id:"merritt",name:"Merritt College (Oakland)",county:"alameda",checked:checkedDate,
+  hub:[L("Student Services and Resources","https://merritt.edu/student-services","A directory of counseling, tutoring, CalWORKs, EOPS/CARE, NextUp, and other services.")],
+  topics:{
+   calfresh:[L("Food Bank","https://merritt.edu/campus-life/food-bank","The page says college staff and the Alameda County Community Food Bank help with CalFresh applications.")],
+   food:[LW("Basic Needs Center","https://merritt.edu/campus-life/basic-needs","The Panther Pantry and other basic needs help. Where: Student Center, Room R-28.","The page says one emergency aid fund ended in September 2025. Ask about current help."),
+         L("Food Bank","https://merritt.edu/campus-life/food-bank","The Panther Produce Pantry, nearby pantries, and CalFresh help.")],
+   housing:[L("Basic Needs Center","https://merritt.edu/campus-life/basic-needs","A list of Oakland and East Bay housing programs and 2-1-1. The page does not describe campus housing.")],
+   health:[L("Wellness Center","https://merritt.edu/wellness-center","Free counseling and referrals for shelter and food. Where: Room R-106.")],
+   mental:[L("Wellness Center","https://merritt.edu/wellness-center","Free counseling. Where: Room R-106."),
+           L("Counseling","https://merritt.edu/counseling","Academic counseling. Where: Counseling Center, R Building, Room 109.")],
+   childcare:[L("Child care at the Peralta colleges","https://www.peralta.edu/admissions/student-resources/child-care","Lists the child care centers at Laney and Merritt."),
+              L("CalWORKs","https://merritt.edu/calworks","CalWORKs support. Where: Building R-128B.")],
+   transport:[peraltaShuttle].concat(peraltaTransit),
+   veterans:[LW("Veterans Services Program","https://merritt.edu/veterans-services","Support for veterans and their families.",OLD)],
+   foster:[L("NextUp","https://merritt.edu/nextup","Support for current and former foster youth. Where: Room R109Q.")],
+   jobs:[L("Career Center","https://merritt.edu/career-center","Career counseling and resume help. Where: Building R-109.")],
+   money:[LW("Financial Aid","https://merritt.edu/financial-aid","Financial aid information. Where: R-113.","The page lists some 2024–25 deadlines. Ask the office for current dates.")],
+   tutoring:[LW("Learning Center and Tutoring","https://merritt.edu/learning-center-tutoring","Tutoring and study help. Where: L121, one floor below the library.","The workshop list on the page is old. Ask the center for current workshops.")],
+   support:[L("EOPS and CARE","https://merritt.edu/eops-care","Extra counseling and support programs. Where: Student Center, R-109."),
+            L("Student Accessibility Services","https://merritt.edu/sas","Accommodations for students with disabilities. Where: R Building, Room 109A.")]
+  }},
+
+ {id:"cypress",name:"Cypress College (Cypress)",county:"orange",checked:checkedDate,
+  hub:[L("Student Services","https://www.cypresscollege.edu/student-services/","A directory of student services.")],
+  topics:{
+   calfresh:[L("Basic Needs and Food Pantry","https://www.cypresscollege.edu/student-life/student-activities/food-bank/","The page links to the state CalFresh site. Where: Building 8.")],
+   food:[L("Basic Needs and Food Pantry","https://www.cypresscollege.edu/student-life/student-activities/food-bank/","A food pantry, diaper pantry, hygiene items, and laundry help. Where: Building 8, next to the Veterans Resource Center.")],
+   housing:[L("Basic Needs and Food Pantry","https://www.cypresscollege.edu/student-life/student-activities/food-bank/","Housing and motel-voucher help through a partner agency. The page has no separate housing page.")],
+   health:[L("Student Health and Wellness Center","https://www.cypresscollege.edu/services/health-center/","Student health services. Where: Gym 2, Building 11, Room 101.")],
+   mental:[L("Student Health and Wellness Center","https://www.cypresscollege.edu/services/health-center/","Mental health services. Where: Gym 2, Building 11, Room 101."),
+           L("Counseling","https://www.cypresscollege.edu/services/counseling/","Academic counseling. Where: Student Center, second floor.")],
+   childcare:[L("Students with Dependents","https://www.cypresscollege.edu/students-with-dependents/","A list of resources for students with children.")],
+   immigration:[L("EOPS, CARE, NextUp, CalWORKs, and Grads to Be","https://www.cypresscollege.edu/services/eops-care-calworks-guardian-scholars/","A combined office that includes the Grads to Be program. Where: Building 6, Room 201.")],
+   veterans:[L("Veterans Resource Center","https://www.cypresscollege.edu/veterans-resource-center/","Support for veterans. Where: Building 8, Room 101.")],
+   foster:[L("NextUp and Guardian Scholars","https://www.cypresscollege.edu/services/eops-care-calworks-guardian-scholars/guardian-scholars/","Support for current and former foster youth. Where: Cypress College Complex, Room 201.")],
+   jobs:[L("Career Planning and Workforce Development Center","https://www.cypresscollege.edu/services/career-planning-center/","Career planning and workforce help. Where: Building 6, Room 215.")],
+   money:[L("Financial Aid","https://www.cypresscollege.edu/financial-aid/","Financial aid information. Where: Building 6, Room 120.")],
+   tutoring:[L("Tutorial Services","https://www.cypresscollege.edu/academics/divisions-special-programs/librarylrc/library-learning-resource-center/learning-resource-center/tutorial-services/","Tutoring in the Learning Resource Center. Where: Building 32, first floor.")],
+   support:[L("EOPS, CARE, NextUp, CalWORKs, and Grads to Be","https://www.cypresscollege.edu/services/eops-care-calworks-guardian-scholars/","Extra counseling and support programs. Where: Building 6, Room 201."),
+            L("Rising Scholars","https://www.cypresscollege.edu/rising-scholars/","Support for students who were formerly incarcerated or affected by the justice system. Where: Humanities, Building 1, Room 126.")]
+  }},
+
+ {id:"fullerton",name:"Fullerton College (Fullerton)",county:"orange",checked:checkedDate,
+  hub:[L("Hornets Resource Center","https://basicneeds.fullcoll.edu/hrc/","A one-stop basic needs hub for food, housing, and registration help. Where: Building 1000, Room 1018.")],
+  topics:{
+   calfresh:[L("CalFresh","https://basicneeds.fullcoll.edu/hrc/calfresh/","In-person help applying for CalFresh at the Hornets Resource Center. Where: Building 1000, Room 1018.")],
+   food:[L("Food Pantry","https://basicneeds.fullcoll.edu/food-pantry/","A free food pantry for students. Where: Student Support Center, Room 102.")],
+   internet:[L("Laptop Semester Loan Program","https://library.fullcoll.edu/laptop-semester-loan-program/","Semester laptop loans from the library. Where: Circulation Desk, 800 building. The page does not mention hotspots.")],
+   housing:[L("Housing","https://basicneeds.fullcoll.edu/hrc/housing/","Housing help, shelter and county referrals. Where: Building 1000, Room 1018.")],
+   health:[L("Student Health and Wellness Center","https://health.fullcoll.edu/","Medical, mental health, and wellness services. Where: Student Support Center, Room 108.")],
+   mental:[L("Health Center services","https://health.fullcoll.edu/services/","Short-term counseling and other clinical services.")],
+   childcare:[L("Family","https://basicneeds.fullcoll.edu/hrc/family/","A diaper program, child care and parent resources. Where: Building 1000, Room 1018."),
+              L("CalWORKs","https://calworks.fullcoll.edu/","Support for students in CalWORKs. Where: Building 2000, Room 2020.")],
+   veterans:[L("Veterans Resource Center","https://veterans.fullcoll.edu/","VA benefits, certification, and counseling. Where: Student Support Center.")],
+   foster:[L("Foster Youth Success Initiative","https://fosteryouth.fullcoll.edu/","Support for current and former foster youth. Where: Student Support Center, Room 208.")],
+   jobs:[LW("Career Center","https://careercenter.fullcoll.edu/","Career exploration and career readiness. Where: Building 2000, Room 2027.","A link to the intake form on this page is broken. Ask the center how to sign up.")],
+   money:[L("Financial Aid","https://financialaid.fullcoll.edu/","FAFSA and California Dream Act help. Where: Building 100, Room 115.")],
+   tutoring:[L("Academic Support Center","https://academicsupport.fullcoll.edu/","Tutoring, writing, and math support. Where: Room 801.")],
+   support:[L("EOPS","https://eops.fullcoll.edu/","Extra counseling and support programs. Where: Student Support Center, Room 208."),
+            L("Disability Support Services","https://dss.fullcoll.edu/","Accommodations and an adaptive computer lab. Where: Building 840, Room 842."),
+            L("Rising Scholars","https://risingscholars.fullcoll.edu/","Support for students who were formerly incarcerated or affected by the justice system. Where: 100 Building, Room 127.")]
+  }},
+
+ {id:"noce",name:"North Orange Continuing Education (Anaheim Campus, Cypress and Wilshire Centers)",county:"orange",checked:checkedDate,
+  hub:[L("Community Resources","https://www.noce.edu/student-services/community-resources/","Lists of outside resources for food, housing, legal help, child care, and health. The school does not endorse them."),
+       L("Locations","https://www.noce.edu/about/locations/","The Anaheim Campus, Cypress Center, and Wilshire Center (Fullerton), with hours. A construction notice is listed for Anaheim.")],
+  topics:{
+   food:[L("Food Pantry","https://www.noce.edu/info/students/food-pantry/","A pantry on the Anaheim Campus (Room 156), with information about Cypress and Fullerton.")],
+   internet:[L("Student Technology Support","https://www.noce.edu/info/students/tech-support/","Login and Wi-Fi help, plus laptop and hotspot loans at Anaheim, Cypress, and Wilshire.")],
+   mental:[L("Student Wellness Resources","https://www.noce.edu/student-services/wellness-resources/","TimelyCare virtual care, workshops, and counseling hours.")],
+   health:[L("Student Wellness Resources","https://www.noce.edu/student-services/wellness-resources/","Virtual care and wellness workshops.")],
+   childcare:[L("Parenting Program","https://www.noce.edu/programs/parenting/","Parenting classes based in Anaheim, offered at centers, community sites, and online.")],
+   immigration:[L("Resources for Undocumented Students","https://www.noce.edu/info/students/undocumented/","The Grads to Be program, Know Your Rights information, and legal and academic resources.")],
+   jobs:[L("Career Services","https://www.noce.edu/student-services/career-services/","A Career Skills and Resource Lab and a fall 2026 workshop schedule. Where: Anaheim Campus, Room 606.")],
+   money:[L("Scholarships and Aid","https://www.noce.edu/student-services/aid/","Scholarships, the Book Award, and a textbook loan program for career training students.")],
+   tutoring:[L("Academic Tutoring","https://www.noce.edu/student-services/tutoring/","In-person and online tutoring. Where: Anaheim Learning Center, Room 140.")],
+   support:[L("Academic Counseling","https://www.noce.edu/student-services/academic-counseling/","Counseling, orientation, and education plans at Anaheim, Cypress, Wilshire, and online.")]
+  }},
+
+ {id:"avc",name:"Antelope Valley College (Lancaster)",county:"losangeles",checked:checkedDate,
+  hub:[L("Basic Needs Center","https://www.avc.edu/basic-needs","Application forms for food, technology, bus pass, and housing help (Fall 2026), plus links to each service.")],
+  topics:{
+   calfresh:[L("Food","https://www.avc.edu/basic-needs/food","The page includes CalFresh information and community food links.")],
+   food:[L("Food","https://www.avc.edu/basic-needs/food","The Marauder Marketplace and a biweekly produce pick-up at Lancaster and Palmdale. Where: Room T-100 (Lancaster).")],
+   internet:[L("Technology","https://www.avc.edu/basic-needs/technology","Request forms for Wi-Fi hotspots and Chromebook loans, plus computer labs.")],
+   housing:[L("Housing","https://www.avc.edu/basic-needs/housing","A housing support application and a list of community shelter and housing resources.")],
+   health:[L("Health Services","https://www.avc.edu/students/student-services/health-services","Telehealth, a health clinic, and vision and dental vouchers. Where: Room T-100, Lancaster.")],
+   mental:[L("Health Services","https://www.avc.edu/students/student-services/health-services","Mental health counseling. Where: Room T-100, Lancaster."),
+           L("Counseling","https://www.avc.edu/counseling","Academic and personal counseling and transfer planning.")],
+   childcare:[L("Student Parents","https://www.avc.edu/students/student-services/student-parents","An overview of child care, priority registration, and referrals for student parents."),
+              L("Child Development Center","https://www.avc.edu/childdev","Preschool programs near parking lot B1 on the Lancaster campus. The page lists a waitlist."),
+              L("CalWORKs","https://www.avc.edu/students/student-services/calworks-program","Support for students in CalWORKs.")],
+   transport:[LW("Transportation","https://www.avc.edu/basic-needs/transportation","A digital Metro GoPass issued by the Basic Needs Center, plus Kern Transit and Metrolink information.","The page says Kern Transit rides are free through June 2026. Ask whether that continues."),
+              L("AVTA: student GoPass program","https://www.avta.com/student-services.php","Antelope Valley Transit Authority’s page, which names Antelope Valley College as part of the Metro GoPass program.")],
+   immigration:[L("Dreamers Center","https://www.avc.edu/dreamers-center-ab540-undocumented-non-citizens","Counseling, workshops, and free immigration legal help. Where: The HUB, Room T-300C.")],
+   veterans:[L("Veterans Resource Center","https://www.avc.edu/veterans-resource-center","Help with VA benefits. Where: Student Services Building, Room 170, Lancaster.")],
+   foster:[L("NextUp","https://www.avc.edu/nextup","Support for current and former foster youth.")],
+   jobs:[L("Career Center","https://www.avc.edu/career","Career assessments and resources.")],
+   money:[L("Financial Aid and Scholarships","https://www.avc.edu/financial-aid-scholarships","Financial aid and scholarship information. Where: Student Services Building lobby.")],
+   tutoring:[L("Tutoring Support","https://www.avc.edu/lc/tutoring-support","Peer tutoring at Lancaster and Palmdale, plus online tutoring.")],
+   support:[L("EOPS and CARE","https://www.avc.edu/students/student-services/eopscare","Extra counseling and support programs."),
+            LW("Office for Students with Disabilities","https://www.avc.edu/students/student-services/osd","Accommodations for students with disabilities.","Some forms on this page are old. Ask the office for current forms.")]
+  }},
+
+ {id:"vvc",name:"Victor Valley College (Victorville)",county:"sanbernardino",checked:checkedDate,
+  hub:[L("THRIVE Resource Center (Basic Needs)","https://www.vvc.edu/thrive-resource-center-basic-needs","A request form for food, housing, and utility help (Fall 2026). Where: Building 51A."),
+       L("Student Services","https://www.vvc.edu/welcome-student-services","A directory of student services.")],
+  topics:{
+   calfresh:[L("Food and Cash Aid for student parents","https://www.vvc.edu/student-parents/food-cash-aid","How to apply for CalFresh through BenefitsCal or GetCalFresh, and on-campus help from Basic Needs.")],
+   food:[L("On-Campus Food","https://www.vvc.edu/campus-food","Free snacks and a weekly food bundle. Where: Buildings 51A, 51B, and 51C.")],
+   housing:[L("Housing Resources","https://www.vvc.edu/housing-resources","A request form and community referrals. The page says the college has no emergency housing program.")],
+   health:[L("Student Health Center","https://www.vvc.edu/student-health-center","Basic medical care, preventive services, and help with health insurance. Where: Building 44.")],
+   mental:[L("Wellness Services","https://www.vvc.edu/wellness-services","Peer support and mental health services. Where: Building 44, Room 103."),
+           L("Counseling","https://www.vvc.edu/vvc-counseling","Counseling appointments. Where: Building 23.")],
+   childcare:[L("Parenting Resources","https://www.vvc.edu/parenting-resources","The Child Development Center (the page lists a waitlist) and after-school programs."),
+              L("Student Parents at VVC","https://www.vvc.edu/student-parents-vvc","A hub for financial aid, child care, food, housing, and wellness resources for student parents.")],
+   transport:[L("Transportation Resources","https://www.vvc.edu/transportation-resources","The page says students ride VVTA Fixed Route and County Route buses free with a VVC Student ID."),
+              L("VVTA: for students","https://vvta.org/for-students","VVTA’s student programs, including Victor Valley College.")],
+   immigration:[L("Steps to Enrollment for undocumented students","https://www.vvc.edu/steps-enrollment-undocumented-students-0","Enrollment steps and a list of outside legal resources. The page does not describe a Dream Resource Center.")],
+   veterans:[L("Veterans Resource Center","https://www.vvc.edu/veterans-resource-center-0","Services and policies for veterans. Where: Building 80, Room 80.01B.")],
+   foster:[L("NextUp","https://www.vvc.edu/welcome-next","Support for current and former foster youth. Where: Building 10B, Upper Campus.")],
+   jobs:[L("Career Center","https://www.vvc.edu/career-center","Workshops, resume reviews, mock interviews, and a career closet. Where: Building 42.")],
+   money:[LW("Financial Aid","https://www.vvc.edu/financial-aid-home-page","Financial aid information. Where: One Stop, Building 23.","Some notes on this page are out of date. Ask the office for current dates.")],
+   tutoring:[L("Tutoring and Academic Support","https://www.vvc.edu/welcome-tutoring-and-academic-support","Lists the tutoring centers and labs.")],
+   support:[L("ACCESS Resource Center","https://www.vvc.edu/access-resource-center","Services for students with disabilities."),
+            L("EOPS","https://www.vvc.edu/student-services-eops-information","Extra counseling and support programs. Where: Upper campus."),
+            L("CARE","https://www.vvc.edu/cooperative-agencies-resources-education-care","Support for single parents. Where: Music Portable #1."),
+            LW("CalWORKs","https://www.vvc.edu/what-calworks","CalWORKs overview and how to start. Where: Building 23.","This page includes an old campus map. Ask the office for current details.")]
+  }},
+
+ {id:"lahc",name:"Los Angeles Harbor College",county:"losangeles",checked:checkedDate,hub:[],
+  topics:{
+   food:[LW("Food Resources","https://lahc.edu/student-services/spr/basic-needs-center/food","A food referral form and lists of local food banks.","Some entries on this page have no contact details.")],
+   health:[LW("Student Health Center","https://www.lahc.edu/student-services/spr/shc","Health services and TimelyCare. Where: Tech building, Room 115.",PH+" It also lists Fall 2024 hours.")],
+   immigration:[LW("Dream Resource Center","https://www.lahc.edu/student-services/spr/dream","Counseling and support for undocumented students. Where: General Classroom 105.",PH+" It lists Spring 2024 hours.")],
+   veterans:[L("Veterans Services","https://www.lahc.edu/student-services/spr/vets","Admissions information, certification, and counseling for military-affiliated students.")],
+   support:[LW("CARE","https://www.lahc.edu/student-services/spr/eops/care","Support for single parents who receive CalWORKs.",PH)]
+  }},
+
+ {id:"lamc",name:"Los Angeles Mission College",county:"losangeles",checked:checkedDate,hub:[],
+  topics:{
+   immigration:[LW("Dream Resource Center","https://www.lamission.edu/student-services/spr/drc","Support for undocumented students. Where: Instructional Building, Room 1050.",PH)]
+  }},
+
+ {id:"lasc",name:"Los Angeles Southwest College",county:"losangeles",checked:checkedDate,
+  hub:[L("Student Support and Success Programs","https://www.lasc.edu/student-services/spr/student-support-success-programs","A directory of about 22 support programs. Where: Student Services Building, Room 209.")],
+  topics:{
+   food:[LW("Welcome Center","https://www.lasc.edu/student-services/welcome-center","Basic needs help and the Cougar Cupboard food pantry. Where: Student Services Building, Room 118.","The page lists hours from Fall 2023 and has a blank email placeholder. Ask the office for current hours.")],
+   immigration:[LW("Dream Resource Center","https://www.lasc.edu/student-services/spr/dream","Counseling, application help, and a resource list. Where: Student Services Building, Room 116.","The page has older notices and blank placeholders. Ask the office for current details.")],
+   veterans:[L("Veterans Resource Center","https://www.lasc.edu/student-services/spr/veterans-resource-center","Support for veterans and dependents. Where: Student Services Building, Room 207.")],
+   jobs:[LW("Career Pathways and Job Center","https://www.lasc.edu/student-services/career-job-center","Career assessment, resume help, and job and internship support. Where: School of Career and Technical Education Building, Room 115.","The page says the online job board is paused.")],
+   support:[LW("EOPS","https://www.lasc.edu/student-services/spr/eops","Extra counseling and support programs. Where: Student Services Building, Room 218.","The dates on this page are old. Ask the office for current dates."),
+            L("Disabled Students Programs and Services","https://www.lasc.edu/student-services/spr/disabled-student-programs-services","Accommodations for students with disabilities. Where: Student Services Building, Room 117."),
+            LW("CalWORKs / GAIN","https://www.lasc.edu/student-services/spr/calworks-gain","CalWORKs and GAIN support. Where: Student Services Building, Room 217.",PH)]
+  }},
+
+ {id:"lapc",name:"Los Angeles Pierce College",county:"losangeles",checked:checkedDate,hub:[],topics:{}},
+
+ {id:"lattc",name:"Los Angeles Trade-Technical College",county:"losangeles",checked:checkedDate,
+  hub:[L("The Beaver’s Lounge, Basic Needs Center","https://www.lattc.edu/student-services/spr/students-in-need","Help with housing, food, clothing, health, and safety, with an intake form.")],
+  topics:{
+   food:[LW("Food Resources","https://www.lattc.edu/student-services/spr/students-in-need/food","A campus pantry at the Beaver’s Lounge and off-campus pantry lists.","Some dates on this page are old. Ask the Basic Needs Center for the current pantry schedule.")],
+   housing:[L("Housing Resources","https://www.lattc.edu/student-services/spr/students-in-need/housing","Agency referrals, shelter and housing hotlines. Where: Office C4-126.")],
+   health:[L("Student Health Center","https://www.lattc.edu/student-services/spr/health-center","Health services and TimelyCare virtual care. Where: Building D3-107.")],
+   mental:[L("Mental Health Services and Resources","https://www.lattc.edu/student-services/spr/students-in-need/mental-health","Therapy and crisis lines. Where: D3, The Hub, Room 107.")],
+   immigration:[L("Dream Resource Center","https://www.lattc.edu/student-services/spr/drc","Support for undocumented students, including immigration legal resources.")],
+   veterans:[L("Veterans Resource Center","https://www.lattc.edu/student-services/spr/vrc","Benefit verification, referrals, and mental health services for veterans.")],
+   jobs:[L("Employment and Career Success","https://www.lattc.edu/student-services/ecs","Workshops, resume and interview help, and a link to the WorkSource Center.")],
+   tutoring:[L("Academic Connections Tutoring Center","https://www.lattc.edu/academic-services/academic-connections-tutoring","Free in-person and online tutoring.")],
+   support:[L("Counseling Center","https://www.lattc.edu/student-services/counseling","In-person and virtual counseling."),
+            L("EOPS","https://www.lattc.edu/student-services/spr/eops","Extra counseling and support programs. Where: Administration/Services Building, Room E5-416."),
+            L("GAIN","https://www.lattc.edu/student-services/spr/gain","Welfare-to-work services offered with the college.")]
+  }},
+
+ {id:"lavc",name:"Los Angeles Valley College (Valley Glen)",county:"losangeles",checked:checkedDate,
+  hub:[],
+  topics:{
+   calfresh:[LW("Basic Needs Center","https://www.lavc.edu/student-services/spr/basic-needs-center","The page lists CalFresh application help. Where: Campus Center 127, the Unity Center.",PH)],
+   food:[LW("Basic Needs Center","https://www.lavc.edu/student-services/spr/basic-needs-center","Weekly food distributions, meal vouchers, and emergency food cards. Where: Campus Center 127, the Unity Center.",PH)],
+   housing:[LW("Basic Needs Center","https://www.lavc.edu/student-services/spr/basic-needs-center","Housing referrals and navigation. The page says the center does not provide direct housing.",PH)],
+   health:[LW("Student Health and Wellness Center","https://www.lavc.edu/student-services/spr/health-center","Medical and behavioral health services. Where: Student Union Building, first floor.","Some COVID-era notices are still on this page. Ask the center for current hours.")],
+   mental:[LW("Mental Health and Wellness","https://www.lavc.edu/student-services/spr/health-center/mental-health","In-person or telehealth therapy and TimelyCare.","The office hours on this page are from 2023. Ask the center for current hours.")],
+   childcare:[L("Resources for Student Parents","https://www.lavc.edu/student-services/spr/calworks/parent-resources","The Child Development Center, EOPS/CARE, the Family Resource Center, and CalWORKs. Where: CalWORKs in ACA Room 1101.")],
+   immigration:[L("Dream Resource Center","https://www.lavc.edu/student-services/spr/dream","Support for undocumented students and legal-aid links. Where: Campus Center 127, the Unity Center.")],
+   veterans:[L("Veterans Resource Center","https://www.lavc.edu/student-services/spr/veterans/vrc","Help starting education benefits and a veterans lounge.")],
+   foster:[L("NextUp and Guardian Scholars","https://www.lavc.edu/student-services/spr/eops/guardian-scholars","Support for current and former foster youth. Where: EOPS/CARE Office, Student Services Center, second floor.")],
+   jobs:[LW("Career Center","https://www.lavc.edu/student-services/career-center","Major and career exploration. Where: Student Services Annex.",PH)],
+   money:[LW("Financial Aid","https://www.lavc.edu/financial-aid","Fee waivers, grants, scholarships, work-study, and loans. Where: Student Services Center, first floor.","The page includes older year information. Ask the office for current deadlines.")],
+   support:[L("Counseling","https://www.lavc.edu/student-services/counseling","Academic counseling, remote and in person. Where: Student Services Annex."),
+            L("TRiO Student Support Services","https://www.lavc.edu/student-services/trio","A computer lab, counseling, tutoring, and workshops.")]
+  }},
+
+ {id:"wlac",name:"West Los Angeles College (Culver City)",county:"losangeles",checked:checkedDate,
+  hub:[L("Student Services Programs and Resources","https://www.wlac.edu/student-services/spr","A list of programs, including Basic Needs, CalWORKs, EOPS, TRiO, and the Child Development Center.")],
+  topics:{
+   food:[LW("Wildcats’ Den (Basic Needs)","https://www.wlac.edu/student-services/spr/basic-needs","Case management, a wardrobe and food pantry, and referrals. Where: CE 105A and CE 103.","This page has an older COVID note and a blank email placeholder."),
+         LW("Free Market (Food Pantry)","https://www.wlac.edu/student-services/spr/basic-needs/food-pantry","A pop-up free market, held most first and third Thursdays of the month. Where: FA 104.",PH)],
+   mental:[L("Health and Wellness Resources","https://www.wlac.edu/student-services/spr/health-center/health-wellness-recources","An index of mental wellbeing, suicide prevention, domestic violence, and housing security resources.")],
+   childcare:[L("Child Development Center","https://www.wlac.edu/student-services/spr/cdc","A licensed center for ages 8 months to 5 years, open on the academic calendar."),
+              L("Student Parent Services","https://www.wlac.edu/student-services/ab-2881","Programs for students with children."),
+              L("CalWORKs / GAIN","https://www.wlac.edu/student-services/spr/calworks","CalWORKs and GAIN support.")],
+   foster:[L("Guardian Scholars Program","https://www.wlac.edu/student-services/spr/guardian-scholars-program","Support for current and former foster youth."),
+           L("CAFYES / NextUp","https://www.wlac.edu/student-services/spr/eops/cafyes-nextup","Foster youth education support.")],
+   jobs:[L("Career Connections Center","https://www.wlac.edu/student-services/career-center","Career exploration, job readiness, internships, and placement. Where: HLRC 112.")],
+   money:[LW("Financial Aid","https://www.wlac.edu/financial-aid","Grants, scholarships, work-study, and loans. Where: Student Services Building, first floor.","The page includes older year information. Ask the office for current deadlines.")],
+   tutoring:[LW("Learning Center Tutoring","https://www.wlac.edu/academic-services/tutoring","In-person and online tutoring.","This page reads as a Spring 2024 page. Ask the center for the current schedule.")],
+   support:[LW("EOPS","https://www.wlac.edu/student-services/spr/eops","Extra counseling and support programs. Where: Student Services Building, Room 330.","The dates on this page are old and it has blank placeholders. Ask the office for current details."),
+            LW("Disabled Students Programs and Services","https://www.wlac.edu/student-services/spr/dsps","Accommodations for students with disabilities.",PH),
+            LW("Welcome Center","https://www.wlac.edu/student-services/welcome-center","Applications, password resets, and enrollment help. Where: TLC Building, first floor, Room 120.",PH)]
+  }}
+);
 
 // Local (county and community) links added October 7, 2026. Merged into COUNTIES.
 // Rule: coverage limits are written into each description so students are not sent to the wrong area.
@@ -457,7 +763,7 @@ const LOCAL = {
   ],
   jobs: [
    L("OC Workforce Solutions: center locations","https://www.ocworkforcesolutions.com/contact","Career service sites in Brea, Laguna Niguel, Los Alamitos, Anaheim, and Santa Ana, with hours."),
-   L("OC Workforce Solutions: events and services","https://www.ocworkforcesolutions.com/","Job seeker services plus workshops and hiring events listed through December 2026.")
+   L("OC Workforce Solutions: events and services","https://www.ocworkforcesolutions.com/","Job seeker services plus the workshops and hiring events listed on the page.")
   ],
   money: [
    L("OC Free Tax Prep: locations","https://ocfreetaxprep.com/locations","Free tax preparation sites searchable by city or ZIP. Most sites close after tax season, so check back in January."),
@@ -469,7 +775,7 @@ const LOCAL = {
    L("Alameda County Community Food Bank: CalFresh help","https://www.accfb.org/calfresh-community-stories/","The page says the food bank can help with CalFresh applications. It is mostly stories, not a how-to page, so contact the food bank to ask. Published May 21, 2026.")
   ],
   food: [
-   L("Alameda County Community Food Bank","https://www.accfb.org/new-agency/","Main page for the county food bank. It points to foodnow.net as its food finder."),
+   L("Alameda County Community Food Bank","https://www.accfb.org/new-agency/","Mostly for agencies that want to become partners. For people who need food, it points to the food bank’s finder at foodnow.net."),
    L("City of Oakland: food distribution","https://www.oaklandca.gov/Community/Food-Services/Food-Distribution-in-Oakland","Pantries, grocery distributions, and hot meals by neighborhood, plus other Alameda County cities. Schedules vary, so call ahead.")
   ],
   housing: [
@@ -531,7 +837,7 @@ const LOCAL = {
  },
  kern: {
   calfresh: [
-   L("Catholic Charities (Bakersfield): CalFresh application help","https://ccdof.org/cal-fresh-food-stamps/","Help applying for and renewing CalFresh at the Bakersfield office. Bakersfield only; the page does not name other areas.")
+   L("Catholic Charities (Bakersfield): CalFresh application help","https://ccdof.org/cal-fresh-food-stamps/","Help applying for and renewing CalFresh at the Bakersfield office. The page also lists Catholic Charities sites in Fresno and Merced; this link is for the Bakersfield office.")
   ],
   food: [
    L("Community Action Partnership of Kern: find food pantries","https://www.capk.org/food-bank/","A food map with filters and hours. The page mentions over 200 distribution points across Kern County. Modified September 23, 2026."),
@@ -620,7 +926,7 @@ const LOCAL = {
 for (const cid in LOCAL) for (const tp in LOCAL[cid]) ADD(cid, tp, LOCAL[cid][tp], tp!=="money" || true);
 // 211 links confirmed through 211 California’s “Find Your 211” page
 const L211S = L("211 Sacramento","https://211sacramento.org/211/","211 California’s list names Community Link Capital Region as the 211 provider for Sacramento County. We could not open this site to check its content.");
-const L211E = L("211 El Dorado County","https://211eldorado.org/","211 California’s list names the County of El Dorado as the provider. The site has little detail, so you may need to call.");
+const L211E = L("211 El Dorado County","https://211eldorado.org/","211 California’s list names the County of El Dorado as the provider. The site lists only power-shutoff help and a hate-incident reporting program, so for other needs use the 211 phone line or the 211 California site.");
 ["food","housing","money"].forEach(t=>{ ADD("sacramento",t,[L211S]); ADD("eldorado",t,[L211E]); });
 COUNTIES.forEach(c=>{ delete c.t._no211; });
 
@@ -726,7 +1032,7 @@ COUNTIES.forEach(c=>{ delete c.t._no211; });
    }
    body.appendChild(sec); text.push("");
   });
-  text.push("This tool does not apply for anything and cannot tell you whether you qualify. Websites change. Ask your college if a link does not work.");
+  text.push("This tool does not apply for anything, does not save anything, and cannot tell you whether you qualify for any program or resource. It points you to official websites so you can follow up and contact them for help. Websites change. Ask your college if a link does not work.");
   lastText=text.join("\n");
  }
 
