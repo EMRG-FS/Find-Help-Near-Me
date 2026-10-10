@@ -41,6 +41,10 @@ button{font:inherit;font-size:1rem;cursor:pointer;min-height:48px;border-radius:
 .btn:hover{background:#024a2f}
 .btn2{background:var(--white);color:var(--forest);border:2px solid var(--forest)}
 .btn2:hover{background:var(--sage-tint)}
+a.btn,a.btn2{display:inline-flex;align-items:center;text-decoration:none;font-size:1rem;font-weight:bold;min-height:48px;border-radius:8px;padding:.6rem 1.25rem}
+a.btn{color:var(--ivory)}a.btn2{color:var(--forest)}
+.video{background:var(--white);border:2px solid var(--sage);border-radius:10px;padding:1rem 1.25rem;margin:0 0 1.25rem}
+.video p{margin:0 0 .75rem}
 .row{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1rem}
 :focus-visible{outline:3px solid var(--forest);outline-offset:3px}
 .btn:focus-visible{box-shadow:0 0 0 3px var(--ivory),0 0 0 6px var(--forest)}
@@ -90,6 +94,7 @@ footer p{margin:0 0 .5rem}
 <noscript><div class="warn" style="max-width:52rem;margin:1rem auto;padding:1rem"><p>This tool needs JavaScript. Please turn it on, or ask your college for a printed list of help.</p></div></noscript>
 <main id="main">
  <div id="formArea" class="noprint">
+  <div class="video"><p><strong>New to this tool?</strong> Watch the short how-to video first. It shows each step, from choosing your college to saving your results.</p><a class="btn" href="https://www.freshstart-online.com/en/video-details/find-help-near-me-tool-explainer-video/28763/" target="_blank" rel="noopener noreferrer">Watch the how-to video<span class="sr"> (opens in a new tab)</span></a></div>
   <div class="note"><p><strong>Before you start:</strong> This tool does not apply for anything, does not save anything, and cannot tell you whether you qualify for any program or resource. Instead, it points you to official websites, so you can follow up for more information and contact them for help. Asking for help is a good first step.</p></div>
   <form id="form" novalidate>
    <h2 id="s1">Step 1: Choose your college</h2>
